@@ -1,6 +1,6 @@
-package com.company.app.Repositories;
+package org.closure.app.Repositories;
 
-import com.company.app.entities.LikeEntity;
+import org.closure.app.entities.LikeEntity;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

@@ -1,9 +1,9 @@
-package com.company.app.Repositories;
+package org.closure.app.Repositories;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.company.app.entities.PostEntity;
+import org.closure.app.entities.PostEntity;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;

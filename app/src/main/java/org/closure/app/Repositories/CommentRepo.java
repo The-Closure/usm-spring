@@ -1,6 +1,6 @@
-package com.company.app.Repositories;
+package org.closure.app.Repositories;
 
-import com.company.app.entities.CommentEntity;
+import org.closure.app.entities.CommentEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

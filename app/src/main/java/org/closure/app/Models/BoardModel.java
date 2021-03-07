@@ -1,4 +1,4 @@
-package com.company.app.Models;
+package org.closure.app.Models;
 
 import java.util.List;
 import java.util.Objects;

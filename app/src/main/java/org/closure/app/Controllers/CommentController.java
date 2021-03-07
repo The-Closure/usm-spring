@@ -1,11 +1,11 @@
-package com.company.app.Controllers;
+package org.closure.app.Controllers;
 
-import com.company.app.Repositories.CommentRepo;
-import com.company.app.Repositories.PostRepo;
-import com.company.app.Repositories.UserRepo;
-import com.company.app.entities.CommentEntity;
-import com.company.app.entities.PostEntity;
-import com.company.app.entities.UserEntity;
+import org.closure.app.Repositories.CommentRepo;
+import org.closure.app.Repositories.PostRepo;
+import org.closure.app.Repositories.UserRepo;
+import org.closure.app.entities.CommentEntity;
+import org.closure.app.entities.PostEntity;
+import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

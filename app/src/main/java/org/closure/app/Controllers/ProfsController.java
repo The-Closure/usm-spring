@@ -1,11 +1,11 @@
-package com.company.app.Controllers;
+package org.closure.app.Controllers;
 
 import java.util.Date;
 
-import com.company.app.Models.ProfsModel;
-import com.company.app.Repositories.ProfsRepo;
-import com.company.app.entities.ProfsEntity;
-import com.company.app.services.FormService;
+import org.closure.app.Models.ProfsModel;
+import org.closure.app.Repositories.ProfsRepo;
+import org.closure.app.entities.ProfsEntity;
+import org.closure.app.services.FormService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

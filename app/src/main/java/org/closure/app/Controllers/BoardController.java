@@ -1,15 +1,15 @@
-package com.company.app.Controllers;
+package org.closure.app.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.company.app.Models.BoardModel;
-import com.company.app.Repositories.BoardRepo;
-import com.company.app.Repositories.UserRepo;
-import com.company.app.entities.BoardEntity;
-import com.company.app.entities.UserEntity;
-import com.company.app.services.FormService;
+import org.closure.app.Models.BoardModel;
+import org.closure.app.Repositories.BoardRepo;
+import org.closure.app.Repositories.UserRepo;
+import org.closure.app.entities.BoardEntity;
+import org.closure.app.entities.UserEntity;
+import org.closure.app.services.FormService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

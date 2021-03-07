@@ -1,4 +1,4 @@
-package com.company.app.entities;
+package org.closure.app.entities;
 
 import java.util.Objects;
 

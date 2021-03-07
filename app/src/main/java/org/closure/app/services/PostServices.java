@@ -1,11 +1,11 @@
-package com.company.app.services;
+package org.closure.app.services;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.company.app.Models.PostModel;
-import com.company.app.entities.PostEntity;
+import org.closure.app.Models.PostModel;
+import org.closure.app.entities.PostEntity;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.company.app.config;
+package org.closure.app.config;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;

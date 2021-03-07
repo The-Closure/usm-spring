@@ -1,4 +1,4 @@
-package com.company.app.services;
+package org.closure.app.services;
 
 public class AuthFuns {
    public static String encodePass(String value){

@@ -1,9 +1,9 @@
-package com.company.app.Controllers;
+package org.closure.app.Controllers;
 
-import com.company.app.Repositories.LikeRepo;
-import com.company.app.Repositories.PostRepo;
-import com.company.app.Repositories.UserRepo;
-import com.company.app.entities.LikeEntity;
+import org.closure.app.Repositories.LikeRepo;
+import org.closure.app.Repositories.PostRepo;
+import org.closure.app.Repositories.UserRepo;
+import org.closure.app.entities.LikeEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

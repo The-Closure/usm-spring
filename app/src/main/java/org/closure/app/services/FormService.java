@@ -1,26 +1,26 @@
-package com.company.app.services;
+package org.closure.app.services;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import com.company.app.Models.BoardModel;
-import com.company.app.Models.CommentModel;
-import com.company.app.Models.CommunityModel;
-import com.company.app.Models.PostModel;
-import com.company.app.Models.ProfsModel;
-import com.company.app.Models.ScholarshipModel;
-import com.company.app.Models.UserModel;
-import com.company.app.Repositories.CommunityRepo;
-import com.company.app.entities.BoardEntity;
-import com.company.app.entities.CommentEntity;
-import com.company.app.entities.CommunityEntity;
-import com.company.app.entities.LikeEntity;
-import com.company.app.entities.PostEntity;
-import com.company.app.entities.ProfsEntity;
-import com.company.app.entities.ScholarEntity;
-import com.company.app.entities.UserEntity;
+import org.closure.app.Models.BoardModel;
+import org.closure.app.Models.CommentModel;
+import org.closure.app.Models.CommunityModel;
+import org.closure.app.Models.PostModel;
+import org.closure.app.Models.ProfsModel;
+import org.closure.app.Models.ScholarshipModel;
+import org.closure.app.Models.UserModel;
+import org.closure.app.Repositories.CommunityRepo;
+import org.closure.app.entities.BoardEntity;
+import org.closure.app.entities.CommentEntity;
+import org.closure.app.entities.CommunityEntity;
+import org.closure.app.entities.LikeEntity;
+import org.closure.app.entities.PostEntity;
+import org.closure.app.entities.ProfsEntity;
+import org.closure.app.entities.ScholarEntity;
+import org.closure.app.entities.UserEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

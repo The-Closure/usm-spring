@@ -1,11 +1,11 @@
-package com.company.app.Controllers;
+package org.closure.app.Controllers;
 
 import java.util.List;
 
-import com.company.app.Models.CommunityModel;
-import com.company.app.Repositories.CommunityRepo;
-import com.company.app.entities.CommunityEntity;
-import com.company.app.services.FormService;
+import org.closure.app.Models.CommunityModel;
+import org.closure.app.Repositories.CommunityRepo;
+import org.closure.app.entities.CommunityEntity;
+import org.closure.app.services.FormService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
