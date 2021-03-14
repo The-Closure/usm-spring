@@ -11,10 +11,7 @@ import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Service
 public class UserService {

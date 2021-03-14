@@ -4,7 +4,6 @@ package org.closure.app.UserModule.repositories;
 import java.util.List;
 import java.util.Optional;
 
-import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 

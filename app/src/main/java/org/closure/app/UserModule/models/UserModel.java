@@ -1,7 +1,6 @@
 package org.closure.app.UserModule.models;
 
 import java.util.Date;
-import java.util.Objects;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
