@@ -1,5 +1,7 @@
 package org.closure.app.UserModule.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.closure.app.UserModule.dto.UserRequest;
@@ -19,6 +21,8 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private ImgService imgService;
 
     public UserResponse addUser(UserRequest userRequest)
     {
@@ -29,12 +33,14 @@ public class UserService {
             uEntity.setName(userRequest.getName());
             uEntity.setPassword(userRequest.getPassword());
             uEntity.setEmail(userRequest.getEmail());
+            uEntity.setImg(imgService.generateImg(userRequest.getName()));
             uEntity.setFlag(true);            
             userRepo.save(uEntity);
             UserResponse response = 
              new UserResponse()
                 .withId(uEntity.getId())
-                .withName(uEntity.getName());
+                .withName(uEntity.getName())
+                .withImg(uEntity.getImg());
             return response;
         }else throw new UserErrorException(userRequest.getEmail()+" is exist");
     }
@@ -47,7 +53,8 @@ public class UserService {
         UserResponse response = 
             new UserResponse()
                 .withId(user.getId())
-                .withName(user.getName());
+                .withName(user.getName())
+                .withImg(user.getImg());
         return response;
     }
     public boolean delete(Long id, String password)
@@ -81,5 +88,18 @@ public class UserService {
          .withStart_year(userModel.getStart_year());
         userRepo.save(user);
         return userModel;    
+    }
+
+    public List<UserResponse> search(String value)
+    {
+        List<UserResponse> responses = new ArrayList<UserResponse>();
+        userRepo.findByEmailLikeOrNameLike(value, value).stream().forEach((e)->{
+            UserResponse userResponse = new UserResponse()
+                .withId(e.getId())
+                .withName(e.getName())
+                .withImg(e.getImg());
+            responses.add(userResponse);
+        });
+        return responses;
     }
 }

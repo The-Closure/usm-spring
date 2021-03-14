@@ -1,5 +1,7 @@
 package org.closure.app.UserModule.controllers;
 
+import java.util.List;
+
 import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.models.UserModel;
@@ -67,5 +69,9 @@ public class UserController {
         return userService.signout(id, name);
     }
     
-
+    @GetMapping(value="/search")
+    public ResponseEntity<List<UserResponse>> getMethodName(@RequestParam(name = "value") String value) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.search(value));
+    }
+    
 }
