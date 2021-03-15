@@ -1,5 +1,6 @@
 package org.closure.app.CommunityModule.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.closure.app.entities.CommunityEntity;
@@ -13,5 +14,7 @@ public interface CommunityRepo extends JpaRepository<CommunityEntity, Long>{
     Optional<CommunityEntity> findByUsers(UserEntity userEntity);
 
     Optional<CommunityEntity> findByName(String name);
+
+    List<CommunityEntity> findByNameLike(String value);
     
 }
