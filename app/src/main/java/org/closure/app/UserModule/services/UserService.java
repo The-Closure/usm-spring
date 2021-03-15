@@ -71,7 +71,7 @@ public class UserService {
     }
     public UserModel edit(UserModel userModel)
     {
-        UserEntity user = userRepo.findByEmailAndPassword(userModel.getName(), userModel.getPassword()).orElseThrow(
+        UserEntity user = userRepo.findByIdAndPassword(Long.valueOf(userModel.getId()), userModel.getPassword()).orElseThrow(
             () -> new UserErrorException("error in email or password"));
         user
          .withAge(userModel.getAge())
