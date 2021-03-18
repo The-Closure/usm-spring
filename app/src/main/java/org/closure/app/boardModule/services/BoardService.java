@@ -36,9 +36,10 @@ public class BoardService {
             .withName(entity.getName());
         return boarderResponse;   
     }
-    public BoardResponse getBoarder(Long id)
+    public BoardResponse getBoard(Long id)
     {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(() -> new BoardErrorException("no board with this id"));
+        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(
+            () -> new BoardErrorException("no board with this id"));
         BoardResponse boardResponse = new BoardResponse()
             .withDescription(boardEntity.getDescription())
             .withId(boardEntity.getId())
@@ -46,19 +47,22 @@ public class BoardService {
             .withName(boardEntity.getName());
             return boardResponse;
     }
-    public BoardResponse editBoarder(BoardModel boardModel)
+    public BoardResponse editBoard(Long id, BoardModel boardModel)
     {
-        BoardEntity boardEntity = boardRepository.save(
-            new BoardEntity()
+        BoardEntity e = boardRepository.findById(id).orElseThrow(
+            () -> new BoardErrorException("no board with this id"));
+
+        e = boardRepository.save(
+                e
                 .withDescription(boardModel.getDescription()) 
                 .withImage(boardModel.getImage())
                 .withName(boardModel.getName())
             );
         BoardResponse boardResponse = new BoardResponse()
-            .withDescription(boardEntity.getDescription())
-            .withId(boardEntity.getId())
-            .withImage(boardEntity.getImage())
-            .withName(boardEntity.getName());
+            .withDescription(e.getDescription())
+            .withId(e.getId())
+            .withImage(e.getImage())
+            .withName(e.getName());
         return boardResponse;
     }
 
