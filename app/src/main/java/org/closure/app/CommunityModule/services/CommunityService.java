@@ -10,10 +10,12 @@ import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.CommunityModule.models.CommunityModel;
 import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.exceptions.UserErrorException;
+import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import io.swagger.models.Response;
@@ -29,17 +31,19 @@ public class CommunityService {
 
     public CommunityResponse findByUsers(UserEntity userEntity)
     {
-        CommunityEntity communityEntity = communityRepo.findByUsers(userEntity).orElseThrow(()-> new CommunityErrorException("can not find community for this user"));
+        CommunityEntity communityEntity = communityRepo.findByUsers(userEntity).orElseThrow(
+            ()-> new CommunityErrorException("can not find community for this user"));
         CommunityResponse communityResponse = new CommunityResponse()
             .withName(communityEntity.getName())
             .withDescription(communityEntity.getDescription())
             .withImg(communityEntity.getImg());
             return communityResponse;
-    }
+    } 
 
     public CommunityResponse findById(Long id)
     {
-         CommunityEntity communityEntity = communityRepo.findById(id).orElseThrow(()-> new CommunityErrorException("no community for this id"));
+         CommunityEntity communityEntity = communityRepo.findById(id).orElseThrow(
+             ()-> new CommunityErrorException("no community for this id"));
         CommunityResponse communityResponse = new CommunityResponse()
             .withName(communityEntity.getName())
             .withDescription(communityEntity.getDescription())
@@ -49,7 +53,8 @@ public class CommunityService {
 
     public CommunityResponse findByName(String name)
     {
-         CommunityEntity communityEntity = communityRepo.findByName(name).orElseThrow(()-> new CommunityErrorException("no community with this name"));
+         CommunityEntity communityEntity = communityRepo.findByName(name).orElseThrow(
+             ()-> new CommunityErrorException("no community with this name"));
         CommunityResponse communityResponse = new CommunityResponse()
             .withName(communityEntity.getName())
             .withDescription(communityEntity.getDescription())
@@ -57,45 +62,56 @@ public class CommunityService {
             return communityResponse;
     }
 
-    public boolean addUser(Long userId, Long communityId)
+    public String addUsreToCommunity(Long userId, Long communityId)
     {
-        boolean exist = false;
-        
-        CommunityEntity communintyEntity = communityRepo.findById(communityId).orElseThrow(
-            ()-> new CommunityErrorException("no community for this id"));
-
-            exist = communintyEntity.getUsers().stream().anyMatch(u -> u.getId().equals(userId));
-
-        if(!exist)
-        {
-            communintyEntity.getUsers().add(
-                userRepo.findById(userId).orElseThrow(()->new UserErrorException("no suer with this id")));
-            communityRepo.save(communintyEntity);
-            exist = true;
-        }
-        return exist;
+        return addUser(userId, communityId) ? "user with id "+userId+" added  to community" : "for some reasons you can't join this community";
     }
 
-    public CommunityResponse addCommunity(CommunityModel communityModel)
+    private boolean addUser(Long userId, Long communityId)
+    {
+        CommunityEntity communityEntity = communityRepo
+            .findById(communityId)
+            .orElseThrow(() -> new CommunityErrorException(
+                    "authorId " + communityId + " not found")
+            );
+
+        userRepo.findById(userId)
+            .map(user -> {
+                user.setCommuninty(communityEntity);
+                return userRepo.save(user);
+            });
+        return userRepo.findAll().stream().filter(user ->
+            user.getCommuninty().getId().equals(communityId)
+        ).toList().size() > 0;
+
+    }
+
+    public CommunityModel addCommunity(CommunityModel communityModel)
     {
         if(communityRepo.findByName(communityModel.getName()).isEmpty())
         {
-
-            CommunityEntity communityEntity = new CommunityEntity();
-            communityEntity
+            CommunityEntity communityEntity = new CommunityEntity()
                 .withDescription(communityModel.getDescription())
                 .withImg(communityModel.getImg())
                 .withName(communityModel.getName());
+            System.out.println(communityEntity.getName());
             communityRepo.save(communityEntity);
-            return new CommunityResponse()
+            System.out.println(communityEntity.getName());
+            return new CommunityModel()
                 .withDescription(communityEntity.getDescription())
                 .withImg(communityEntity.getImg())
-                .withName(communityEntity.getName());
+                .withName(communityEntity.getName())
+                .withId(communityEntity.getId());
 
         }else throw new CommunityErrorException("this community is already exist");
     }
 
-    public boolean delete(Long id)
+    public String deleteCommunity(Long id)
+    {
+        return delete(id) ? "community deleted" :"for some reason you can't delete this community";
+    }
+
+    private boolean delete(Long id)
     {
         CommunityEntity community = communityRepo.findById(id).orElseThrow(
             () -> new UserErrorException("error in id"));
@@ -128,5 +144,40 @@ public class CommunityService {
         return communityModel;
     }
 
+    public List<CommunityModel> getAll()
+    {
+        List<CommunityModel> models = new ArrayList<>();
+        communityRepo.findAll().stream().forEach((e)->{
+            CommunityModel communityModel = new CommunityModel()
+                .withDescription(e.getDescription())
+                .withImg(e.getImg())
+                .withName(e.getName())
+                .withId(e.getId());
+            models.add(communityModel);
+        });
+        return models;
+    }
+
+    public List<UserModel> getUsers(Long communityId)
+    {
+        List<UserModel> models = new ArrayList<>();
+        CommunityEntity communityEntity = communityRepo.findById(communityId)
+            .orElseThrow(()->new CommunityErrorException("no community with this di"));
+        communityEntity.getUsers().forEach((e)->{
+            UserModel model = new UserModel()
+                .withAge(e.getAge())
+                .withCommunity_name(e.getCommunity_name())
+                .withEmail(e.getEmail())
+                .withId(e.getId())
+                .withImg(e.getImg())
+                .withName(e.getName())
+                .withStart_year(e.getStart_year())
+                .withStudy_year(e.getStudy_year());
+                models.add(model);
+        });
+        return models;
+    }
+
+    
 }
 

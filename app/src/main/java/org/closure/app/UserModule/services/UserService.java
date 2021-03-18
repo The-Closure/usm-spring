@@ -99,4 +99,10 @@ public class UserService {
         });
         return responses;
     }
+
+    public UserEntity getById(Long id)
+    {
+        return userRepo.findById(id).orElseThrow(
+            ()-> new UserErrorException("no user with this id"));
+    }
 }
