@@ -9,7 +9,7 @@ import lombok.With;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
-public class BorderRequest {
+public class BoardRequest {
     private Long id;
     private String name;
 }

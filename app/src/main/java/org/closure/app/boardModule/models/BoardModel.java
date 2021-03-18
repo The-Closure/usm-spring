@@ -1,4 +1,4 @@
-package org.closure.app.boardModule.dto;
+package org.closure.app.boardModule.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.With;
 @AllArgsConstructor
 @NoArgsConstructor
 @With
-public class BoarderResponse {
+public class BoardModel {
     private Long id;
     private String name;
     private String image;
