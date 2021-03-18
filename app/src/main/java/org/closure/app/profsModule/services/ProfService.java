@@ -12,7 +12,6 @@ import org.closure.app.entities.ProfsEntity;
 import org.closure.app.profsModule.dto.ProfRequest;
 import org.closure.app.profsModule.dto.ProfResponse;
 import org.closure.app.profsModule.exceptions.ProfsErrorException;
-import org.closure.app.profsModule.models.ProfModel;
 import org.closure.app.profsModule.repositories.ProfRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

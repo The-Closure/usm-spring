@@ -132,6 +132,10 @@ public class BoardService {
                         .withId(e.getId())
                         .withName(e.getName())
                         .withImage(e.getImage())
+                        .withCreated_at(e.getCreated_at())
+                        .withSpec(e.getSpec())
+                        .withEmail(e.getEmail())
+                        .withPassword(e.getPassword())
                 );
         });
         return ProfResponses;

@@ -6,6 +6,7 @@ import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.services.UserService;
+import org.closure.app.boardModule.dto.BoardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,5 +72,11 @@ public class UserController {
     public ResponseEntity<List<UserResponse>> getMethodName(@RequestParam(name = "value") String value) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.search(value));
     }
+
+    @GetMapping(value="/getBoards")
+    public List<BoardResponse> getBoardsForUser(@RequestParam(name = "userID") String userID) {
+        return userService.getBoards(Long.parseLong(userID));
+    }
+    
     
 }
