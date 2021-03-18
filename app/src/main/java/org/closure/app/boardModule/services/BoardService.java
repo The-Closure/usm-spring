@@ -11,7 +11,9 @@ import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.boardModule.models.BoardModel;
 import org.closure.app.boardModule.repositories.BoardRepository;
 import org.closure.app.entities.BoardEntity;
+import org.closure.app.entities.ProfsEntity;
 import org.closure.app.entities.UserEntity;
+import org.closure.app.profsModule.dto.ProfResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,4 +119,23 @@ public class BoardService {
         });
         return userResponses;
     }
+
+    public List<ProfResponse> getProfs(Long boardID)
+    {
+        List<ProfsEntity> Profs= boardRepository.findById(boardID).orElseThrow(
+            ()-> new BoardErrorException("no board with this id")).getProfs();
+        List<ProfResponse> ProfResponses = new ArrayList<>();
+        Profs.forEach((e) -> {
+            ProfResponses.add
+                (
+                    new ProfResponse()
+                        .withId(e.getId())
+                        .withName(e.getName())
+                        .withImage(e.getImage())
+                );
+        });
+        return ProfResponses;
+    }
+
+
 }

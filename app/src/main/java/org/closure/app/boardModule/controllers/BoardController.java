@@ -6,6 +6,7 @@ import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.models.BoardModel;
 import org.closure.app.boardModule.services.BoardService;
+import org.closure.app.profsModule.dto.ProfResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -69,10 +70,15 @@ public class BoardController {
     }
     
     @GetMapping(value="/getusers")
-    public List<UserResponse> getUserForBoard(@RequestParam(name = "boardID") String boardID) {
+    public List<UserResponse> getUsersForBoard(@RequestParam(name = "boardID") String boardID) {
         return boardService.getUsers(Long.parseLong(boardID));
     }
 
+    @GetMapping(value="/getProfs")
+    public List<ProfResponse> getProfsForBoard(@RequestParam(name = "boardID") String boardID) {
+        return boardService.getProfs(Long.parseLong(boardID));
+    }
 
+    
 
 }
