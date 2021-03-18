@@ -18,14 +18,19 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping(path = "/v2/api")
+@RequestMapping(path = "/v2/api/posts")
 public class PostController {
     
     @Autowired
     PostService postService;
 
     @PutMapping(value="/addpost/{userID}")
-    public PostResponse addPost(@PathVariable(name = "userID") String userID, @RequestBody PostRequest request) {
+    public PostResponse addPost
+        (
+            @PathVariable(name = "userID") String userID, 
+            @RequestBody PostRequest request
+        ) 
+    {
         return postService.addPost(Long.parseLong(userID), request);
     }
 

@@ -3,6 +3,7 @@ package org.closure.app.postModule.services;
 import java.util.Date;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
+import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
@@ -28,6 +29,8 @@ public class PostService {
     {
         UserEntity userEntity = userRepo.findById(userID).orElseThrow(
             ()-> new UserErrorException("no user with this id"));
+        if(userEntity.getCommuninty().getId() == null) 
+            throw new CommunityErrorException("no community for this user");
         PostEntity postEntity = postRepo.save
             (
                 new PostEntity()
@@ -67,10 +70,11 @@ public class PostService {
                     .getPosts().stream().allMatch(
                         (p) -> !p.getId().equals(postID))) 
                             throw new PostErrorException("you don't have permissions to edit this post");
-            pEntity =pEntity 
-                .withAttach(request.getAttach() != null ? request.getAttach() : pEntity.getAttach())
-                .withTitle(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
-                .withValue(request.getValue() != null ? request.getValue() : pEntity.getValue());
+            pEntity = postRepo.save(pEntity 
+            .withAttach(request.getAttach() != null ? request.getAttach() : pEntity.getAttach())
+            .withTitle(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
+            .withValue(request.getValue() != null ? request.getValue() : pEntity.getValue()));
+            
             return new PostResponse()
                 .withAttach(pEntity.getAttach())
                 .withPostID(pEntity.getId())
