@@ -1,10 +1,8 @@
 package org.closure.app.CommunityModule.services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.closure.app.CommunityModule.dto.CommunityRequest;
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.CommunityModule.models.CommunityModel;
@@ -15,10 +13,8 @@ import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import io.swagger.models.Response;
 
 @Service
 public class CommunityService {
