@@ -7,6 +7,7 @@ import org.closure.app.CommunityModule.models.CommunityModel;
 import org.closure.app.CommunityModule.services.CommunityService;
 import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.services.UserService;
+import org.closure.app.postModule.dto.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,5 +82,11 @@ public class CommunityController {
     public ResponseEntity<List<UserModel>> getUsers(@RequestParam(name = "cId") Long cId) {
         return ResponseEntity.status(HttpStatus.OK).body(service.getUsers(cId));
     }
+
+    @GetMapping(value="/getPosts")
+    public List<PostResponse> getPosts(@RequestParam(name = "communityID") String communityID) {
+        return service.getPosts(Long.parseLong(communityID));
+    }
+    
     
 }

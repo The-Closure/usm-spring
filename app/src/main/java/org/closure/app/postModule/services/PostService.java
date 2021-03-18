@@ -58,10 +58,15 @@ public class PostService {
             .withCommunityID(pEntity.getPcommuninty().getId())
             .withValue(pEntity.getValue());
     }
-    public PostResponse updatePost(Long postID, PostRequest request)
+    public PostResponse updatePost(Long postID, Long userID, PostRequest request)
     {
         PostEntity pEntity = postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"));
+            if(userRepo.findById(userID).orElseThrow(
+                () -> new UserErrorException("no user with this id"))
+                    .getPosts().stream().allMatch(
+                        (p) -> !p.getId().equals(postID))) 
+                            throw new PostErrorException("you don't have permissions to edit this post");
             pEntity =pEntity 
                 .withAttach(request.getAttach() != null ? request.getAttach() : pEntity.getAttach())
                 .withTitle(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
@@ -78,20 +83,18 @@ public class PostService {
     {
         PostEntity pEntity = postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"));
-        UserEntity uEntity = userRepo.findById(userID).orElseThrow(
+        userRepo.findById(userID).orElseThrow(
             () -> new UserErrorException("no user with this id"));
         if(!pEntity.getUEntity().getId().equals(userID)) return false;
         postRepo.deleteById(postID);
         return postRepo.findById(postID).isEmpty();
     }
-
     public CommunityResponse getCommunity(Long postID)
     {
         return postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"))
                 .getPcommuninty().toCommunityResponse();
     }
-
     public UserResponse getUser(Long postID)
     {
         return postRepo.findById(postID).orElseThrow(
