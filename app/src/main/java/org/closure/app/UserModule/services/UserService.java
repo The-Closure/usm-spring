@@ -11,7 +11,6 @@ import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
-import org.closure.app.boardModule.repositories.BoardRepository;
 import org.closure.app.entities.BoardEntity;
 import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,6 @@ public class UserService {
     @Autowired
     private ImgService imgService;
 
-    @Autowired
-    private BoardRepository boardRepository;
 
     public UserResponse addUser(UserRequest userRequest)
     {
@@ -113,7 +110,7 @@ public class UserService {
             ()-> new UserErrorException("no user with this id"));
     }
 
-    public List<BoardResponse> getUsers(Long userID)
+    public List<BoardResponse> getBoards(Long userID)
     {
         List<BoardEntity> boards= userRepo.findById(userID).orElseThrow(
             ()-> new BoardErrorException("no board with this name")).getBoards();

@@ -55,8 +55,6 @@ public class UserController {
 
     @PostMapping(value="/update")
     public ResponseEntity<UserModel> updaEntity(@RequestBody UserModel model) {
-        //TODO: process POST request
-        
         return ResponseEntity.status(HttpStatus.OK).body(userService.edit(model));
     }
     

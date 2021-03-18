@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
-import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
-import org.closure.app.boardModule.dto.BoardRequest;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.boardModule.models.BoardModel;
