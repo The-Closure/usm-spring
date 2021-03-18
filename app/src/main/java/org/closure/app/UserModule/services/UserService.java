@@ -9,6 +9,10 @@ import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
+import org.closure.app.boardModule.dto.BoardResponse;
+import org.closure.app.boardModule.exceptions.BoardErrorException;
+import org.closure.app.boardModule.repositories.BoardRepository;
+import org.closure.app.entities.BoardEntity;
 import org.closure.app.entities.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,9 @@ public class UserService {
 
     @Autowired
     private ImgService imgService;
+
+    @Autowired
+    private BoardRepository boardRepository;
 
     public UserResponse addUser(UserRequest userRequest)
     {
@@ -105,4 +112,23 @@ public class UserService {
         return userRepo.findById(id).orElseThrow(
             ()-> new UserErrorException("no user with this id"));
     }
+
+    public List<BoardResponse> getUsers(Long userID)
+    {
+        List<BoardEntity> boards= userRepo.findById(userID).orElseThrow(
+            ()-> new BoardErrorException("no board with this name")).getBoards();
+        List<BoardResponse> BoardResponses = new ArrayList<>();
+        boards.forEach((e) -> {
+            BoardResponses.add
+                (
+                    new BoardResponse()
+                        .withId(e.getId())
+                        .withName(e.getName())
+                        .withImage(e.getImage())
+                        .withDescription(e.getDescription())
+                );
+        });
+        return BoardResponses;
+    }
+
 }
