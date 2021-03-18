@@ -105,4 +105,7 @@ public class PostService {
             () -> new PostErrorException("no post with this id"))
                 .getUEntity().toUserResponse();
     }
+
+    //TODO: add method to fetch comments for post
+
 }

@@ -147,5 +147,8 @@ public class UserService {
             });
         return postResponses;
     }
+      //TODO: add method to fetch general info about user by its id
+      
+      //TODO: add method to fetch comment for user by its id
 
 }

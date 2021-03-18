@@ -10,6 +10,7 @@ import lombok.With;
 @NoArgsConstructor
 @With
 public class CommentResponse {
+    private Long id;
     private String value;
     private Long userID;
     private Long postID;
