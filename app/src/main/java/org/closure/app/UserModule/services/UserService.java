@@ -13,6 +13,7 @@ import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.entities.BoardEntity;
 import org.closure.app.entities.UserEntity;
+import org.closure.app.postModule.dto.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -126,6 +127,25 @@ public class UserService {
                 );
         });
         return BoardResponses;
+    }
+
+    public List<PostResponse> getPosts(Long userID)
+    {
+        UserEntity uEntity = userRepo.findById(userID).orElseThrow(
+            () -> new UserErrorException("no user with this id"));
+        List<PostResponse> postResponses = new ArrayList<>();
+        uEntity.getPosts().forEach(
+            (p) -> {
+                PostResponse postResponse = new PostResponse()
+                    .withAttach(p.getAttach())
+                    .withCommunityID(p.getPcommuninty().getId())
+                    .withPostID(p.getId())
+                    .withTitle(p.getTitle())
+                    .withUserID(p.getUEntity().getId())
+                    .withValue(p.getValue());
+                postResponses.add(postResponse);
+            });
+        return postResponses;
     }
 
 }

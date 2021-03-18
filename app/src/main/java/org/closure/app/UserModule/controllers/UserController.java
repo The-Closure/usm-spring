@@ -31,9 +31,14 @@ public class UserController {
     UserService userService;
 
     @PostMapping(value="/add")
-    public ResponseEntity<UserResponse> getMethodName(@RequestBody UserRequest request) {
+    public ResponseEntity<Object> getMethodName(@RequestBody UserRequest request) {
         System.out.println(request.toString());
-        return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(request));
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(request));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(e.getMessage());
+        }
+        
     }
 
     @PutMapping(value="/signin")

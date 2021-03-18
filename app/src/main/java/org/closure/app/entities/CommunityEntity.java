@@ -11,6 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import org.closure.app.CommunityModule.dto.CommunityResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,5 +46,12 @@ public class CommunityEntity {
     @OneToMany(mappedBy = "pcommuninty")
     List<PostEntity> posts;
 
+    public CommunityResponse toCommunityResponse()
+    {
+        return new CommunityResponse()
+            .withDescription(description)
+            .withImg(img)
+            .withName(name);
+    }
 
 }

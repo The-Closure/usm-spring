@@ -12,6 +12,7 @@ import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
+import org.closure.app.postModule.dto.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -174,6 +175,24 @@ public class CommunityService {
         return models;
     }
 
+    public List<PostResponse> getPosts(Long communityID)
+    {
+        CommunityEntity cEntity = communityRepo.findById(communityID).orElseThrow(
+            () -> new UserErrorException("no community with this id"));
+        List<PostResponse> postResponses = new ArrayList<>();
+        cEntity.getPosts().forEach(
+            (p) -> {
+                PostResponse postResponse = new PostResponse()
+                    .withAttach(p.getAttach())
+                    .withCommunityID(p.getPcommuninty().getId())
+                    .withPostID(p.getId())
+                    .withTitle(p.getTitle())
+                    .withUserID(p.getUEntity().getId())
+                    .withValue(p.getValue());
+                postResponses.add(postResponse);
+            });
+        return postResponses;
+    }
     
 }
 

@@ -12,6 +12,7 @@ import lombok.With;
 public class PostResponse {
     private Long postID;
     private Long userID; 
+    private Long communityID;
     private String title;
     private String value;
     private String attach; 
