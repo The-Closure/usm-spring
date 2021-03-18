@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @RestController
-@RequestMapping(path = "/api/v2/boards")
+@RequestMapping(path = "/v2/api/boards")
 public class BoardController {
     
     @Autowired
@@ -29,7 +29,7 @@ public class BoardController {
 
     @PostMapping(value="/addboard")
     public BoardResponse addBoard(@RequestBody BoardModel entity) {
-        return boardService.addBoarder(entity);
+        return boardService.addBoard(entity);
     }
 
     @GetMapping(value="/getboard")
@@ -58,8 +58,13 @@ public class BoardController {
         return boardService.joinBoard(Long.parseLong(userID), Long.parseLong(boardID));
     }
     
-    @PutMapping(value="joinboard/{userID}/{boardID}")
-    public boolean leaveBoard(@PathVariable(name = "userID") String userID,@PathVariable(name = "boardID") String boardID) {
+    @PutMapping(value="leaveBoard/{userID}/{boardID}")
+    public boolean leaveBoard
+        (
+            @PathVariable(name = "userID") String userID,
+            @PathVariable(name = "boardID") String boardID
+        )
+    {
         return boardService.leaveBoard(Long.parseLong(userID), Long.parseLong(boardID));
     }
     

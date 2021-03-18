@@ -19,32 +19,34 @@ import org.springframework.stereotype.Service;
 public class BoardService {
 
     @Autowired
-    BoardRepository boardRepository;
+    private BoardRepository boardRepository;
 
     @Autowired
-    UserRepo userRepo;
-    public BoardResponse addBoarder(BoardModel boarderModel)
+    private UserRepo userRepo;
+    public BoardResponse addBoard(BoardModel boarderModel)
     {
         BoardEntity entity = boardRepository.save(
            new BoardEntity()
             .withDescription(boarderModel.getDescription())
-            .withImage(boarderModel.getImage()))
-            .withName(boarderModel.getName());
+            .withName(boarderModel.getName())
+            .withImage(boarderModel.getImage()));
         BoardResponse boarderResponse = new BoardResponse()
             .withDescription(entity.getDescription())
             .withImage(entity.getImage())
-            .withName(entity.getName());
+            .withName(entity.getName())
+            .withId(entity.getId());
         return boarderResponse;   
     }
     public BoardResponse getBoard(Long id)
     {
         BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(
             () -> new BoardErrorException("no board with this id"));
+            System.out.println(boardEntity.getName());
         BoardResponse boardResponse = new BoardResponse()
             .withDescription(boardEntity.getDescription())
             .withId(boardEntity.getId())
-            .withImage(boardEntity.getImage())
-            .withName(boardEntity.getName());
+            .withName(boardEntity.getName())
+            .withImage(boardEntity.getImage());
             return boardResponse;
     }
     public BoardResponse editBoard(Long id, BoardModel boardModel)
@@ -96,14 +98,13 @@ public class BoardService {
         boardRepository.findById(boardID).orElseThrow(
             () -> new BoardErrorException("no board with this id"));
         boardEntities = boardEntities.stream().filter((e) -> !e.getId().equals(boardID)).toList();    
-        user.setBoards(boardEntities);
-        userRepo.save(user);
+        userRepo.save(user.withBoards(boardEntities));
         return true;
     }
     public List<UserResponse> getUsers(Long boardID)
     {
         List<UserEntity> users= boardRepository.findById(boardID).orElseThrow(
-            ()-> new BoardErrorException("no board with this name")).getUsers();
+            ()-> new BoardErrorException("no board with this id")).getUsers();
         List<UserResponse> userResponses = new ArrayList<>();
         users.forEach((e) -> {
             userResponses.add
