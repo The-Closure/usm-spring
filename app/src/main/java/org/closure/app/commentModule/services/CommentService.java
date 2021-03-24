@@ -1,5 +1,8 @@
 package org.closure.app.commentModule.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.commentModule.dto.CommentRequest;
@@ -91,4 +94,16 @@ public class CommentService {
         return true;
     }
     
+    public List<CommentResponse> getCommentsForPost(Long postID)
+    {
+        return postRepo.findById(postID).orElseThrow(
+            () -> new PostErrorException("no post with this id"))
+                .getComments().stream().map(
+                    (mapper)-> new CommentResponse()
+                    .withId(mapper.getId())
+                    .withPostID(mapper.getPEntity().getId())
+                    .withUserID(mapper.getUEntity().getId())
+                    .withValue(mapper.getValue()))
+                        .toList();
+    }
 }
