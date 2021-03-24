@@ -86,21 +86,6 @@ public class CommentService {
         if(isCommentOwner || isPostOwner)
             commentRepo.deleteById(commentID);
         return isCommentOwner || isPostOwner;
-        // UserEntity userEntity = userRepo.findById(userID).orElseThrow(
-        //     () -> new UserErrorException("no user with this id"));
-        // PostEntity postEntity = postRepo.findById(postID).orElseThrow(
-        //     () -> new UserErrorException("no post with this id"));
-        // commentRepo.findById(commentID).orElseThrow(
-        //     () -> new UserErrorException("no comment with this id"));
-        // boolean owner = userEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
-        // System.out.println(owner);
-        // boolean match_post = postEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
-        // System.out.println(match_post);
-        // if(owner && match_post)
-        //     commentRepo.deleteById(commentID);
-        // else
-        //     return false;
-        // return true;
 
     }
     
