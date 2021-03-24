@@ -77,21 +77,32 @@ public class CommentService {
             .withValue(cEntity.getValue());
     }
 
-    public boolean deleteComment(Long userID, Long postID, Long commentID)
+    public boolean deleteComment(Long userID, Long commentID)
     {
-        UserEntity userEntity = userRepo.findById(userID).orElseThrow(
-            () -> new UserErrorException("no user with this id"));
-        PostEntity postEntity = postRepo.findById(postID).orElseThrow(
-            () -> new UserErrorException("no post with this id"));
-        commentRepo.findById(commentID).orElseThrow(
-            () -> new UserErrorException("no comment with this id"));
-        boolean owner = userEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
-        boolean match_post = postEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
-        if(owner && match_post)
+        boolean isCommentOwner = commentRepo.findById(commentID).orElseThrow(
+            ()-> new CommentErrorException("no comment with this id")).getUEntity().getId().equals(userID);
+        
+        boolean isPostOwner = commentRepo.findById(commentID).orElseThrow(
+            ()-> new CommentErrorException("no comment with this id")).getPEntity().getUEntity().getId().equals(userID);
+        if(isCommentOwner || isPostOwner)
             commentRepo.deleteById(commentID);
-        else
-            return false;
-        return true;
+        return isCommentOwner || isPostOwner;
+        // UserEntity userEntity = userRepo.findById(userID).orElseThrow(
+        //     () -> new UserErrorException("no user with this id"));
+        // PostEntity postEntity = postRepo.findById(postID).orElseThrow(
+        //     () -> new UserErrorException("no post with this id"));
+        // commentRepo.findById(commentID).orElseThrow(
+        //     () -> new UserErrorException("no comment with this id"));
+        // boolean owner = userEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
+        // System.out.println(owner);
+        // boolean match_post = postEntity.getComments().stream().anyMatch((c) -> c.getId().equals(commentID));
+        // System.out.println(match_post);
+        // if(owner && match_post)
+        //     commentRepo.deleteById(commentID);
+        // else
+        //     return false;
+        // return true;
+
     }
     
     public List<CommentResponse> getCommentsForPost(Long postID)

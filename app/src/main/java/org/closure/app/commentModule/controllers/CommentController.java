@@ -60,24 +60,22 @@ public class CommentController {
             );  
     }
 
-    @DeleteMapping(value = "delete/{userID}/{postID}/{commentID}")
+    @DeleteMapping(value = "delete/{userID}/{commentID}")
     public boolean deleteComment
     (
         @PathVariable(name = "userID") String userID,
-        @PathVariable(name = "postID") String postID,
         @PathVariable(name = "commentID") String commentID
     )
     {
         return commentService.deleteComment
             (
                 Long.parseLong(userID), 
-                Long.parseLong(postID), 
                 Long.parseLong(commentID)
             );
     }
 
     @GetMapping(value="/getcomments/{postID}")
-    public List<CommentResponse> getCommentsForPost(@RequestParam(name = "postID") String postID) 
+    public List<CommentResponse> getCommentsForPost(@PathVariable(name = "postID") String postID) 
     {
         return commentService.getCommentsForPost(Long.parseLong(postID));
     }
