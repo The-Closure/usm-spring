@@ -44,7 +44,7 @@ public class PostEntity {
     private String title;
     private String value;
     private String attach;
-    @OneToMany(mappedBy = "pEntity" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pentity" , cascade = CascadeType.ALL)
     private List<LikeEntity> likes;
     @OneToMany(mappedBy = "pEntity" , cascade = CascadeType.ALL)
     private List<CommentEntity> comments;

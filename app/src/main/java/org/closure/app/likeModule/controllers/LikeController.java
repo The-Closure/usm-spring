@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.closure.app.likeModule.dto.LikeRequest;
 import org.closure.app.likeModule.dto.LikeResponse;
+import org.closure.app.likeModule.repositories.LikeRepo;
 import org.closure.app.likeModule.services.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,16 @@ public class LikeController {
     {
         return likeService.getLikesForUser(userID);
     }
+
+    @DeleteMapping(value = "/deletelike")
+   public boolean deleteLike
+   (
+       @RequestParam(name = "userID") Long userID, 
+       @RequestParam(name = "likeID") Long likeID
+   )
+   {
+       return likeService.deleteLike(userID, likeID);
+   }
     
 
 }

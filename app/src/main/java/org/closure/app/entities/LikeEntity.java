@@ -30,10 +30,10 @@ public class LikeEntity {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "u_id", nullable = false)
-    private UserEntity uEntity;
+    private UserEntity uentity;
     @ManyToOne
     @JoinColumn(name = "p_id", nullable = false)
-    private PostEntity pEntity;
+    private PostEntity pentity;
 
   
 

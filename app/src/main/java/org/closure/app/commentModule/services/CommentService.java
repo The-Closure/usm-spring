@@ -93,12 +93,14 @@ public class CommentService {
     {
         return postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"))
-                .getComments().stream().map(
-                    (mapper)-> new CommentResponse()
-                    .withId(mapper.getId())
-                    .withPostID(mapper.getPEntity().getId())
-                    .withUserID(mapper.getUEntity().getId())
-                    .withValue(mapper.getValue()))
-                        .toList();
+                .getComments().stream().map
+                    (
+                        (mapper)-> new CommentResponse()
+                            .withId(mapper.getId())
+                            .withPostID(mapper.getPEntity().getId())
+                            .withUserID(mapper.getUEntity().getId())
+                            .withValue(mapper.getValue())
+                    )
+                .toList();
     }
 }

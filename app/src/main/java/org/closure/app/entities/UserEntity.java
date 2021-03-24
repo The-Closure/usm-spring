@@ -72,7 +72,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "uEntity" ,cascade = CascadeType.ALL , orphanRemoval = true)
     List<PostEntity> posts;
 
-    @OneToMany(mappedBy = "uEntity" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "uentity" , cascade = CascadeType.ALL , orphanRemoval = true)
     List<LikeEntity> likes;
     
     @ManyToMany(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

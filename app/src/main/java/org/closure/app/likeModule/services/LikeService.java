@@ -13,7 +13,9 @@ import org.closure.app.likeModule.repositories.LikeRepo;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LikeService {
 
     @Autowired
@@ -44,7 +46,7 @@ public class LikeService {
 
     public List<LikeResponse> getLikesForPost(Long postID)
     {
-        return likeRepo.findByPEntity(postRepo.findById(postID).orElseThrow(
+        return likeRepo.findByPentity(postRepo.findById(postID).orElseThrow(
             ()-> new PostErrorException("no post with this id"))).stream().map
                 (
                     (mapper) -> new LikeResponse
@@ -52,9 +54,9 @@ public class LikeService {
                             mapper.getId(),
                             new UserResponse
                             (
-                                mapper.getUEntity().getId(),
-                                mapper.getUEntity().getName(),
-                                mapper.getUEntity().getImg()
+                                mapper.getUentity().getId(),
+                                mapper.getUentity().getName(),
+                                mapper.getUentity().getImg()
                             )
                         )
                 )
@@ -63,16 +65,16 @@ public class LikeService {
 
     public List<LikeResponse> getLikesForUser(Long userID)
     {
-        return likeRepo.findByUEntity(userRepo.findById(userID).orElseThrow(
+        return likeRepo.findByUentity(userRepo.findById(userID).orElseThrow(
             ()-> new UserErrorException("no user with this id"))).stream().map
                 (
                     (mapper) -> new LikeResponse(
                         mapper.getId(),
                         new UserResponse
                         (
-                            mapper.getUEntity().getId(),
-                            mapper.getUEntity().getName(),
-                            mapper.getUEntity().getImg()
+                            mapper.getUentity().getId(),
+                            mapper.getUentity().getName(),
+                            mapper.getUentity().getImg()
                         )
                     )
                 )
@@ -82,7 +84,7 @@ public class LikeService {
     public boolean deleteLike(Long userID, Long likeID)
     {
         boolean isLikeOwner = likeRepo.findById(likeID).orElseThrow(
-            ()-> new LikeErrorException("no like with this id")).getUEntity().getId().equals(userID);
+            ()-> new LikeErrorException("no like with this id")).getUentity().getId().equals(userID);
         if(isLikeOwner) likeRepo.deleteById(likeID);
         else return false;
         return true;

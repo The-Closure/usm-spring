@@ -7,7 +7,8 @@ import org.closure.app.entities.PostEntity;
 import org.closure.app.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+
 public interface LikeRepo extends JpaRepository<LikeEntity, Long> {
-    List<LikeEntity> findByPEntity(PostEntity pEntity);
-    List<LikeEntity> findByUEntity(UserEntity uEntity);
+    List<LikeEntity> findByPentity(PostEntity pEntity);
+    List<LikeEntity> findByUentity(UserEntity uEntity);
 }
