@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
+import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
@@ -25,19 +27,22 @@ public class UserService {
     @Autowired
     private ImgService imgService;
 
+    @Autowired
+    private CommunityRepo communityRepo;
 
     public UserResponse addUser(UserRequest userRequest)
     {
         Optional<UserEntity> user = userRepo.findByEmail(userRequest.getEmail());
         if(user.isEmpty())
         {
-            UserEntity uEntity = new UserEntity();
-            uEntity.setName(userRequest.getName());
-            uEntity.setPassword(userRequest.getPassword());
-            uEntity.setEmail(userRequest.getEmail());
-            uEntity.setImg(imgService.generateImg(userRequest.getName()));
-            uEntity.setFlag(true);            
-            userRepo.save(uEntity);
+            UserEntity uEntity =  userRepo.save(new UserEntity().
+            withPassword(userRequest.getPassword()).
+            withName(userRequest.getName()).
+            withEmail(userRequest.getEmail()).
+            withImg(imgService.generateImg(userRequest.getName())).
+            withFlag(true).            
+            withCommuninty(userRequest.getCommunity() != null ? communityRepo.findById(userRequest.getCommunity()).orElseThrow(() -> new CommunityErrorException("no community with this id")) : null) 
+           );
             UserResponse response = 
              new UserResponse()
                 .withId(uEntity.getId())

@@ -54,4 +54,8 @@ public class CommunityEntity {
             .withName(name);
     }
 
+    public Object fromResponse(CommunityResponse findById) {
+        return null;
+    }
+
 }
