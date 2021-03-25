@@ -34,7 +34,7 @@ import lombok.With;
 public class CommunityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    Long id;
     private String name;
     private String description;
     // @OneToOne(fetch = FetchType.LAZY, optional = true)

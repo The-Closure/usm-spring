@@ -1,11 +1,16 @@
 package org.closure.app.postModule.controllers;
 
+import java.util.List;
+
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.postModule.dto.PostRequest;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,5 +74,15 @@ public class PostController {
     public CommunityResponse getCommunity(@RequestParam(name = "postID") String postID) {
         return postService.getCommunity(Long.parseLong(postID));
     }
-    
+ 
+    @GetMapping(value = "getposts")
+    public ResponseEntity<List<PostResponse>> getAllEmployees(
+                        @RequestParam(defaultValue = "0") Integer pageNo, 
+                        @RequestParam(defaultValue = "10") Integer pageSize,
+                        @RequestParam(defaultValue = "id") String sortBy) 
+    {
+        List<PostResponse> list = postService.getAllPosts(pageNo, pageSize, sortBy);
+ 
+        return new ResponseEntity<List<PostResponse>>(list, new HttpHeaders(), HttpStatus.OK); 
+    }
 }

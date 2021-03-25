@@ -1,6 +1,10 @@
 package org.closure.app.postModule.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.util.Converter;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
@@ -12,8 +16,13 @@ import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostRequest;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.exceptions.PostErrorException;
+import org.closure.app.postModule.mapper.PostMapper;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -104,6 +113,27 @@ public class PostService {
         return postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"))
                 .getUEntity().toUserResponse();
+    }
+    public List<PostResponse> getAllPosts(Integer pageNo, Integer pageSize, String sortBy) {
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+ 
+        Page<PostEntity> pagedResult = postRepo.findAll(paging);
+         
+        if(pagedResult.hasContent()) {
+
+            Page<PostResponse> response = pagedResult.map((entity) -> {
+                return new PostResponse()
+                    .withAttach(entity.getAttach())
+                    .withCommunityID(entity.getPcommuninty().getId())
+                    .withPostID(entity.getId())
+                    .withTitle(entity.getTitle())
+                    .withUserID(entity.getUEntity().getId())
+                    .withValue(entity.getValue());
+              });
+            return response.getContent();
+        } else {
+            return new ArrayList<PostResponse>();
+        }
     }
 
     //TODO: add method to fetch comments for post
