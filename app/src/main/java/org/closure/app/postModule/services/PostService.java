@@ -18,6 +18,7 @@ import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.mapper.PostMapper;
 import org.closure.app.postModule.repositories.PostRepo;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -120,16 +121,8 @@ public class PostService {
         Page<PostEntity> pagedResult = postRepo.findAll(paging);
          
         if(pagedResult.hasContent()) {
-
-            Page<PostResponse> response = pagedResult.map((entity) -> {
-                return new PostResponse()
-                    .withAttach(entity.getAttach())
-                    .withCommunityID(entity.getPcommuninty().getId())
-                    .withPostID(entity.getId())
-                    .withTitle(entity.getTitle())
-                    .withUserID(entity.getUEntity().getId())
-                    .withValue(entity.getValue());
-              });
+            PostMapper mapper = Mappers.getMapper(PostMapper.class);
+            Page<PostResponse> response = pagedResult.map(mapper::PostToResponse);
             return response.getContent();
         } else {
             return new ArrayList<PostResponse>();
