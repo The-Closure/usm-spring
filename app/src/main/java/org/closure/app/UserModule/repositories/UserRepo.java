@@ -19,7 +19,7 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByIdAndName(Long id, String name);
 
-    @Query(value="select * from user u where u.name like %:keyword% or u.email like %:keyword%", nativeQuery=true)
+    @Query(value="select * from user  where name like %:keyword% or email like %:keyword%", nativeQuery=true)
     List<UserEntity> findByEmailLikeOrNameLike(@Param("keyword") String keyword);
 
 
