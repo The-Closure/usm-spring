@@ -69,7 +69,7 @@ public class CommunityController {
     }
 
     @PostMapping(value="/edit")
-    public ResponseEntity<CommunityModel> editCommunity(@RequestBody CommunityModel entity) {
+    public ResponseEntity<CommunityResponse> editCommunity(@RequestBody CommunityModel entity) {
         return ResponseEntity.status(HttpStatus.OK).body(service.edit(entity));
     }
     

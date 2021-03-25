@@ -129,16 +129,14 @@ public class CommunityService {
         return responses;
     }
 
-    public CommunityModel edit(CommunityModel communityModel)
+    public CommunityResponse edit(CommunityModel communityModel)
     {
-        CommunityEntity communityEntity = communityRepo.findByName(communityModel.getName()).orElseThrow(
-            ()-> new CommunityErrorException("no community with this name"));
-        communityEntity
+           
+        return communityRepo.save(communityRepo.findById(communityModel.getId()).orElseThrow(
+            ()-> new CommunityErrorException("no community with this id"))
             .withDescription(communityModel.getDescription())
             .withImg(communityModel.getImg())
-            .withName(communityModel.getName());
-        communityRepo.save(communityEntity);
-        return communityModel;
+            .withName(communityModel.getName())).toCommunityResponse();
     }
 
     public List<CommunityModel> getAll()

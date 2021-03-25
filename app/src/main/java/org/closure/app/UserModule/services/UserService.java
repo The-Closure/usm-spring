@@ -95,7 +95,7 @@ public class UserService {
     public List<UserResponse> search(String value)
     {
         List<UserResponse> responses = new ArrayList<UserResponse>();
-        userRepo.findByEmailLikeOrNameLike(value, value).stream().forEach((e)->{
+        userRepo.findByEmailLikeOrNameLike(value).stream().forEach((e)->{
             UserResponse userResponse = new UserResponse()
                 .withId(e.getId())
                 .withName(e.getName())

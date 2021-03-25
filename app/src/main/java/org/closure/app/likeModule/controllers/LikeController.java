@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.closure.app.likeModule.dto.LikeRequest;
 import org.closure.app.likeModule.dto.LikeResponse;
-import org.closure.app.likeModule.repositories.LikeRepo;
 import org.closure.app.likeModule.services.LikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
