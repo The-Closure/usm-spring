@@ -7,10 +7,9 @@ import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.commentModule.dto.CommentRequest;
 import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.commentModule.exceptions.CommentErrorException;
+import org.closure.app.commentModule.mapper.CommentMapper;
 import org.closure.app.commentModule.repositories.CommentRepo;
 import org.closure.app.entities.CommentEntity;
-import org.closure.app.entities.PostEntity;
-import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,35 +28,25 @@ public class CommentService {
     UserRepo userRepo;
     
     public CommentResponse addComment(Long userID, Long postID, CommentRequest request)
-    {
-        PostEntity pEntity = postRepo.findById(postID).orElseThrow(
-            () -> new PostErrorException("no post with this id"));
-        UserEntity uEntity = userRepo.findById(userID).orElseThrow(
-            () -> new PostErrorException("no user with this id"));
-         CommentEntity cEntity = commentRepo.save(
-            new CommentEntity()
-                .withPEntity(pEntity)
-                .withUEntity(uEntity)
-                .withValue(request.getValue())
-            );
-            
-        CommentResponse commentResponse =new CommentResponse()
-            .withId(cEntity.getId())
-            .withPostID(cEntity.getPEntity().getId())
-            .withUserID(cEntity.getUEntity().getId())
-            .withValue(cEntity.getValue());
-        return commentResponse;
+    {          
+        return CommentMapper.INSTANCE.commentToResponse(
+            commentRepo.save(
+                CommentMapper.INSTANCE.responseToComment(
+                    request,  
+                    userRepo.findById(userID).orElseThrow(
+                        () -> new PostErrorException("no user with this id")),  
+                    postRepo.findById(postID).orElseThrow(
+                        () -> new PostErrorException("no post with this id"))
+                )
+            )
+        );
     }
 
     public CommentResponse getComment(Long commentID)
     {
-        CommentEntity commentEntity = commentRepo.findById(commentID).orElseThrow(
-            () -> new CommentErrorException("no comment with this id"));
-        return new CommentResponse()
-            .withId(commentEntity.getId())
-            .withPostID(commentEntity.getPEntity().getId())
-            .withUserID(commentEntity.getUEntity().getId())
-            .withValue(commentEntity.getValue());
+        return CommentMapper.INSTANCE.commentToResponse(commentRepo.findById(commentID).orElseThrow(
+            () -> new CommentErrorException("no comment with this id"))
+        );
     }
 
     public CommentResponse updateComment(Long userID, Long postID, Long commentID, CommentRequest commentRequest)
@@ -66,15 +55,9 @@ public class CommentService {
             () -> new UserErrorException("no user with this id"));
         postRepo.findById(postID).orElseThrow(
             () -> new UserErrorException("no post with this id"));
-        CommentEntity cEntity = commentRepo.findById(commentID).orElseThrow(
-            () -> new UserErrorException("no comment with this id"));
-        cEntity.setValue(commentRequest.getValue());
-        commentRepo.save(cEntity);
-        return new CommentResponse()
-            .withId(cEntity.getId())
-            .withPostID(cEntity.getPEntity().getId())
-            .withUserID(cEntity.getUEntity().getId())
-            .withValue(cEntity.getValue());
+        return CommentMapper.INSTANCE.commentToResponse(
+            commentRepo.save( commentRepo.findById(commentID).orElseThrow(
+                    () -> new UserErrorException("no comment with this id")).withValue(commentRequest.getValue())));
     }
 
     public boolean deleteComment(Long userID, Long commentID)
@@ -94,14 +77,6 @@ public class CommentService {
     {
         return postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"))
-                .getComments().stream().map
-                    (
-                        (mapper)-> new CommentResponse()
-                            .withId(mapper.getId())
-                            .withPostID(mapper.getPEntity().getId())
-                            .withUserID(mapper.getUEntity().getId())
-                            .withValue(mapper.getValue())
-                    )
-                .toList();
+                .getComments().stream().map(CommentMapper.INSTANCE::commentToResponse).toList();
     }
 }
