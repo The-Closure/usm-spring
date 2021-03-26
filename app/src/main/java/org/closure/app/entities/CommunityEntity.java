@@ -37,15 +37,15 @@ public class CommunityEntity {
     Long id;
     private String name;
     private String description;
-    // @OneToOne(fetch = FetchType.LAZY, optional = true)
-    // @JoinColumn(name = "user_id", nullable = true)
-    // private UserEntity admin;
     private String img;
     @OneToMany(mappedBy = "communinty")
     List<UserEntity> users;
     @OneToMany(mappedBy = "pcommuninty")
     List<PostEntity> posts;
-
+    // @OneToOne(fetch = FetchType.LAZY, optional = true)
+    // @JoinColumn(name = "user_id", nullable = true)
+    // private UserEntity admin;
+    
     public CommunityResponse toCommunityResponse()
     {
         return new CommunityResponse()
