@@ -1,21 +1,19 @@
 package org.closure.app.UserModule.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
-import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
+import org.closure.app.UserModule.mapper.UserMapper;
 import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
-import org.closure.app.entities.BoardEntity;
+import org.closure.app.boardModule.mapper.BoardMapper;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
+import org.closure.app.postModule.mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,59 +22,39 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private ImgService imgService;
-
-    @Autowired
-    private CommunityRepo communityRepo;
+ 
 
     public UserResponse addUser(UserRequest userRequest)
     {
-        Optional<UserEntity> user = userRepo.findByEmail(userRequest.getEmail());
-        if(user.isEmpty())
-        {
-            UserEntity uEntity =  userRepo.save(new UserEntity().
-            withPassword(userRequest.getPassword()).
-            withName(userRequest.getName()).
-            withEmail(userRequest.getEmail()).
-            withImg(imgService.generateImg(userRequest.getName())).
-            withFlag(true).            
-            withCommuninty(userRequest.getCommunity() != null ? communityRepo.findById(userRequest.getCommunity()).orElseThrow(() -> new CommunityErrorException("no community with this id")) : null) 
-           );
-            UserResponse response = 
-             new UserResponse()
-                .withId(uEntity.getId())
-                .withName(uEntity.getName())
-                .withImg(uEntity.getImg());
-            return response;
-        }else throw new UserErrorException(userRequest.getEmail()+" is exist");
+        if(userRepo.findByEmail(userRequest.getEmail()).isEmpty())
+            return UserMapper.INSTANCE.userToResponse(
+                userRepo.save(
+                    UserMapper.INSTANCE.requestToUser(userRequest)
+                )
+            );
+        else 
+            throw new UserErrorException(userRequest.getEmail()+" is exist");
     }
     public UserResponse signin(String email, String password)
     {
-        UserEntity user = userRepo.findByEmailAndPassword(email, password).orElseThrow(
-            () -> new UserErrorException(email+"error in email or password"));
-        user.setFlag(true);
-        userRepo.save(user);
-        UserResponse response = 
-            new UserResponse()
-                .withId(user.getId())
-                .withName(user.getName())
-                .withImg(user.getImg());
-        return response;
+         return  UserMapper.INSTANCE.userToResponse(
+             userRepo.save(
+                 userRepo.findByEmailAndPassword(email, password).orElseThrow(
+                    () -> new UserErrorException(email+"error in email or password")
+                ).withFlag(true)
+            )
+        );
     }
     public boolean delete(Long id, String password)
     {
-        UserEntity user = userRepo.findByIdAndPassword(id, password).orElseThrow(
-            () -> new UserErrorException("error in id or password"));
-        userRepo.delete(user);
+        userRepo.delete(userRepo.findByIdAndPassword(id, password).orElseThrow(
+            () -> new UserErrorException("error in id or password")));
         return userRepo.findById(id).isEmpty();
     }
     public boolean signout(Long id, String name)
     {
-        UserEntity user = userRepo.findByIdAndName(id, name).orElseThrow(
-            () -> new UserErrorException("error in id or name"));
-        user.setFlag(false);
-        userRepo.save(user);
+        userRepo.save(userRepo.findByIdAndName(id, name).orElseThrow(
+            () -> new UserErrorException("error in id or name")).withFlag(false));
         return !userRepo.findByIdAndName(id, name).get().isFlag();
     }
     public UserModel edit(UserModel userModel)
@@ -99,15 +77,9 @@ public class UserService {
 
     public List<UserResponse> search(String value)
     {
-        List<UserResponse> responses = new ArrayList<UserResponse>();
-        userRepo.findByEmailLikeOrNameLike(value).stream().forEach((e)->{
-            UserResponse userResponse = new UserResponse()
-                .withId(e.getId())
-                .withName(e.getName())
-                .withImg(e.getImg());
-            responses.add(userResponse);
-        });
-        return responses;
+       return userRepo.findByEmailLikeOrNameLike(value).stream().map(
+           UserMapper.INSTANCE::userToResponse
+        ).toList();
     }
 
     public UserEntity getById(Long id)
@@ -118,42 +90,27 @@ public class UserService {
 
     public List<BoardResponse> getBoards(Long userID)
     {
-        List<BoardEntity> boards= userRepo.findById(userID).orElseThrow(
-            ()-> new BoardErrorException("no board with this name")).getBoards();
-        List<BoardResponse> BoardResponses = new ArrayList<>();
-        boards.forEach((e) -> {
-            BoardResponses.add
-                (
-                    new BoardResponse()
-                        .withId(e.getId())
-                        .withName(e.getName())
-                        .withImage(e.getImage())
-                        .withDescription(e.getDescription())
-                );
-        });
-        return BoardResponses;
+        return userRepo.findById(userID).orElseThrow(
+            ()-> new BoardErrorException("no board with this name")).getBoards().stream().map(
+                BoardMapper.INSTANCE::boardToResponse).toList();
+       
     }
 
     public List<PostResponse> getPosts(Long userID)
     {
-        UserEntity uEntity = userRepo.findById(userID).orElseThrow(
-            () -> new UserErrorException("no user with this id"));
-        List<PostResponse> postResponses = new ArrayList<>();
-        uEntity.getPosts().forEach(
-            (p) -> {
-                PostResponse postResponse = new PostResponse()
-                    .withAttach(p.getAttach())
-                    .withCommunityID(p.getPcommuninty().getId())
-                    .withPostID(p.getId())
-                    .withTitle(p.getTitle())
-                    .withUserID(p.getUEntity().getId())
-                    .withValue(p.getValue());
-                postResponses.add(postResponse);
-            });
-        return postResponses;
+        return userRepo.findById(userID).orElseThrow(
+            () -> new UserErrorException("no user with this id"))
+            .getPosts()
+            .stream()
+            .map(PostMapper.mapper::PostToResponse)
+            .toList();
+        
+        
     }
       //TODO: add method to fetch general info about user by its id
       
-      //TODO: add method to fetch comment for user by its id
+      //TODO: add method to fetch comments for user by its id
+
+
 
 }

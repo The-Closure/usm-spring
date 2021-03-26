@@ -9,11 +9,13 @@ import org.closure.app.CommunityModule.mapper.CommunityMapper;
 import org.closure.app.CommunityModule.models.CommunityModel;
 import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.exceptions.UserErrorException;
+import org.closure.app.UserModule.mapper.UserMapper;
 import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
+import org.closure.app.postModule.mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -130,44 +132,24 @@ public class CommunityService {
 
     public List<UserModel> getUsers(Long communityId)
     {
-        List<UserModel> models = new ArrayList<>();
-        CommunityEntity communityEntity = communityRepo.findById(communityId)
-            .orElseThrow(()->new CommunityErrorException("no community with this di"));
-        communityEntity.getUsers().forEach((e)->{
-            UserModel model = new UserModel()
-                .withAge(e.getAge())
-                .withCommunity_name(e.getCommunity_name())
-                .withEmail(e.getEmail())
-                .withId(e.getId())
-                .withImg(e.getImg())
-                .withName(e.getName())
-                .withStart_year(e.getStart_year())
-                .withStudy_year(e.getStudy_year());
-                models.add(model);
-        });
-        return models;
-        //TODO : ADD MAPPER FEATURE FOR USER MODEL
+        return  communityRepo.findById(communityId).orElseThrow(
+            ()->new CommunityErrorException("no community with this di")).getUsers().stream().map(
+                UserMapper.INSTANCE::userToModel
+            ).toList();
+      
     }
 
     public List<PostResponse> getPosts(Long communityID)
     {
-        CommunityEntity cEntity = communityRepo.findById(communityID).orElseThrow(
-            () -> new UserErrorException("no community with this id"));
-        List<PostResponse> postResponses = new ArrayList<>();
-        cEntity.getPosts().forEach(
-            (p) -> {
-                PostResponse postResponse = new PostResponse()
-                    .withAttach(p.getAttach())
-                    .withCommunityID(p.getPcommuninty().getId())
-                    .withPostID(p.getId())
-                    .withTitle(p.getTitle())
-                    .withUserID(p.getUEntity().getId())
-                    .withValue(p.getValue());
-                postResponses.add(postResponse);
-            });
-        return postResponses;
-            //TODO : ADD MAPPER FEATURE FOR POST MODEL
+        return  communityRepo.findById(communityID).orElseThrow(
+            () -> new UserErrorException("no community with this id"))
+            .getPosts()
+            .stream()
+            .map(PostMapper.mapper::PostToResponse)
+            .toList();
     }
+
+   
     
 }
 

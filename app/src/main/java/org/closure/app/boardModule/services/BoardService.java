@@ -1,10 +1,10 @@
 package org.closure.app.boardModule.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
+import org.closure.app.UserModule.mapper.UserMapper;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
@@ -12,9 +12,9 @@ import org.closure.app.boardModule.mapper.BoardMapper;
 import org.closure.app.boardModule.models.BoardModel;
 import org.closure.app.boardModule.repositories.BoardRepository;
 import org.closure.app.entities.BoardEntity;
-import org.closure.app.entities.ProfsEntity;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.profsModule.dto.ProfResponse;
+import org.closure.app.profsModule.mapper.ProfMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -92,42 +92,24 @@ public class BoardService {
     }
     public List<UserResponse> getUsers(Long boardID)
     {
-        List<UserEntity> users= boardRepository.findById(boardID).orElseThrow(
-            ()-> new BoardErrorException("no board with this id")).getUsers();
-        List<UserResponse> userResponses = new ArrayList<>();
-        users.forEach((e) -> {
-            userResponses.add
-                (
-                    new UserResponse()
-                        .withId(e.getId())
-                        .withName(e.getName())
-                        .withImg(e.getImg())
-                );
-        });
-        return userResponses;
-        //TODO : add mapper for user entity  
+        return boardRepository.findById(boardID).orElseThrow(
+            ()-> new BoardErrorException("no board with this id"))
+            .getUsers()
+            .stream()
+            .map(
+                UserMapper.INSTANCE::userToResponse)
+            .toList();
+  
     }
 
     public List<ProfResponse> getProfs(Long boardID)
     {
-        List<ProfsEntity> Profs= boardRepository.findById(boardID).orElseThrow(
-            ()-> new BoardErrorException("no board with this id")).getProfs();
-        List<ProfResponse> ProfResponses = new ArrayList<>();
-        Profs.forEach((e) -> {
-            ProfResponses.add
-                (
-                    new ProfResponse()
-                        .withId(e.getId())
-                        .withName(e.getName())
-                        .withImage(e.getImage())
-                        .withCreated_at(e.getCreated_at())
-                        .withSpec(e.getSpec())
-                        .withEmail(e.getEmail())
-                        .withPassword(e.getPassword())
-                );
-        });
-        return ProfResponses;
-        //TODO : add mapper for prof entity
+        return boardRepository.findById(boardID).orElseThrow(
+            ()-> new BoardErrorException("no board with this id"))
+            .getProfs()
+            .stream()
+            .map(ProfMapper.INSTANCE::profToResponse)
+            .toList();
     }
 
 

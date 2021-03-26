@@ -9,7 +9,6 @@ import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.commentModule.exceptions.CommentErrorException;
 import org.closure.app.commentModule.mapper.CommentMapper;
 import org.closure.app.commentModule.repositories.CommentRepo;
-import org.closure.app.entities.CommentEntity;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -4,7 +4,6 @@ import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.models.BoardModel;
 import org.closure.app.entities.BoardEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
