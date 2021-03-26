@@ -8,6 +8,7 @@ import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
+import org.closure.app.boardModule.mapper.BoardMapper;
 import org.closure.app.boardModule.models.BoardModel;
 import org.closure.app.boardModule.repositories.BoardRepository;
 import org.closure.app.entities.BoardEntity;
@@ -27,47 +28,33 @@ public class BoardService {
     private UserRepo userRepo;
     public BoardResponse addBoard(BoardModel boarderModel)
     {
-        BoardEntity entity = boardRepository.save(
-           new BoardEntity()
-            .withDescription(boarderModel.getDescription())
-            .withName(boarderModel.getName())
-            .withImage(boarderModel.getImage()));
-        BoardResponse boarderResponse = new BoardResponse()
-            .withDescription(entity.getDescription())
-            .withImage(entity.getImage())
-            .withName(entity.getName())
-            .withId(entity.getId());
-        return boarderResponse;   
+        if(boardRepository.findByName(boarderModel.getName()).isEmpty())
+            return BoardMapper.INSTANCE.boardToResponse(
+                boardRepository.save(
+                    BoardMapper.INSTANCE.modelToBoard(boarderModel)
+                )
+            );   
+        else 
+            throw new BoardErrorException("this board is already exist");
+       
     }
     public BoardResponse getBoard(Long id)
     {
-        BoardEntity boardEntity = boardRepository.findById(id).orElseThrow(
-            () -> new BoardErrorException("no board with this id"));
-            System.out.println(boardEntity.getName());
-        BoardResponse boardResponse = new BoardResponse()
-            .withDescription(boardEntity.getDescription())
-            .withId(boardEntity.getId())
-            .withName(boardEntity.getName())
-            .withImage(boardEntity.getImage());
-            return boardResponse;
+        return BoardMapper.INSTANCE.boardToResponse(boardRepository.findById(id).orElseThrow(
+                () -> new BoardErrorException("no board with this id")
+            )
+        );
     }
     public BoardResponse editBoard(Long id, BoardModel boardModel)
     {
-        BoardEntity e = boardRepository.findById(id).orElseThrow(
-            () -> new BoardErrorException("no board with this id"));
-
-        e = boardRepository.save(
-                e
-                .withDescription(boardModel.getDescription()) 
-                .withImage(boardModel.getImage())
-                .withName(boardModel.getName())
-            );
-        BoardResponse boardResponse = new BoardResponse()
-            .withDescription(e.getDescription())
-            .withId(e.getId())
-            .withImage(e.getImage())
-            .withName(e.getName());
-        return boardResponse;
+        return BoardMapper.INSTANCE.boardToResponse(boardRepository.save(
+            boardRepository.findById(id).orElseThrow(
+                () -> new BoardErrorException("no board with this id"))
+                    .withDescription(boardModel.getDescription()) 
+                    .withImage(boardModel.getImage())
+                    .withName(boardModel.getName())
+            )
+        );
     }
 
     public boolean deleteBoard(Long id)
@@ -118,6 +105,7 @@ public class BoardService {
                 );
         });
         return userResponses;
+        //TODO : add mapper for user entity  
     }
 
     public List<ProfResponse> getProfs(Long boardID)
@@ -139,6 +127,7 @@ public class BoardService {
                 );
         });
         return ProfResponses;
+        //TODO : add mapper for prof entity
     }
 
 
