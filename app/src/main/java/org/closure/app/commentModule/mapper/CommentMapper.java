@@ -10,15 +10,15 @@ import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
-public interface CommentMapper {
+public abstract class CommentMapper {
     
     public static CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    @Mapping(target = "userID", expression = "java(entity.getUEntity().getId())")
-    @Mapping(target = "postID", expression = "java(entity.getPEntity().getId())")
-    public CommentResponse commentToResponse(CommentEntity entity);
+    // @Mapping(target = "userID", expression = "java(entity.getUentity().getId())")
+    // @Mapping(target = "postID", expression = "java(entity.getPentity().getId())")
+    public abstract CommentResponse commentToResponse(CommentEntity entity);
 
-    @Mapping(target = "uEntity", source = "uEntity")
-    @Mapping(target = "pEntity", source = "pEntity")
-    public CommentEntity responseToComment(CommentRequest request, UserEntity uEntity, PostEntity pEntity);
+    // @Mapping(target = "uEntity", expression  = "java(uEntity)")
+    // @Mapping(target = "pEntity", expression  = "java(pEntity)")
+    public abstract CommentEntity responseToComment(CommentRequest request);
 }

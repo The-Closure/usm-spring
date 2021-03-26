@@ -46,7 +46,7 @@ public class PostEntity {
     private String attach;
     @OneToMany(mappedBy = "pentity" , cascade = CascadeType.ALL)
     private List<LikeEntity> likes;
-    @OneToMany(mappedBy = "pEntity" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pentity" , cascade = CascadeType.ALL)
     private List<CommentEntity> comments;
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date created_at;

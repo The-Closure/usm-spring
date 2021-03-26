@@ -1,6 +1,5 @@
 package org.closure.app.CommunityModule.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;

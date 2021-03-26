@@ -18,6 +18,4 @@ public abstract class PostMapper {
     @Mapping(target = "communityID", expression = "java(post.getPcommuninty().getId())")
     public abstract PostResponse PostToResponse(PostEntity post);
 
-    Long getOwnerId(PostEntity post){ return post.getUEntity().getId();}
-    Long getCommunityId(PostEntity post){ return post.getPcommuninty().getId();}
 }

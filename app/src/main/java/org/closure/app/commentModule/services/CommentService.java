@@ -30,14 +30,12 @@ public class CommentService {
     {          
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save(
-                CommentMapper.INSTANCE.responseToComment(
-                    request,  
-                    userRepo.findById(userID).orElseThrow(
-                        () -> new PostErrorException("no user with this id")),  
-                    postRepo.findById(postID).orElseThrow(
-                        () -> new PostErrorException("no post with this id"))
-                )
-            )
+                CommentMapper.INSTANCE.responseToComment(request)
+                .withPentity(postRepo.findById(postID).orElseThrow(
+                         () -> new PostErrorException("no post with this id")))
+                .withUentity(userRepo.findById(userID).orElseThrow(
+                            () -> new PostErrorException("no user with this id"))) 
+            ) 
         );
     }
 
@@ -62,10 +60,10 @@ public class CommentService {
     public boolean deleteComment(Long userID, Long commentID)
     {
         boolean isCommentOwner = commentRepo.findById(commentID).orElseThrow(
-            ()-> new CommentErrorException("no comment with this id")).getUEntity().getId().equals(userID);
+            ()-> new CommentErrorException("no comment with this id")).getUentity().getId().equals(userID);
         
         boolean isPostOwner = commentRepo.findById(commentID).orElseThrow(
-            ()-> new CommentErrorException("no comment with this id")).getPEntity().getUEntity().getId().equals(userID);
+            ()-> new CommentErrorException("no comment with this id")).getPentity().getUEntity().getId().equals(userID);
         if(isCommentOwner || isPostOwner)
             commentRepo.deleteById(commentID);
         return isCommentOwner || isPostOwner;

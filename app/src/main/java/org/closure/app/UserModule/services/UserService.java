@@ -2,6 +2,8 @@ package org.closure.app.UserModule.services;
 
 import java.util.List;
 
+import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
+import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
@@ -11,6 +13,7 @@ import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.boardModule.mapper.BoardMapper;
+import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.mapper.PostMapper;
@@ -22,14 +25,20 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private CommunityRepo communityRepo;
  
 
     public UserResponse addUser(UserRequest userRequest)
     {
         if(userRepo.findByEmail(userRequest.getEmail()).isEmpty())
             return UserMapper.INSTANCE.userToResponse(
-                userRepo.save(
-                    UserMapper.INSTANCE.requestToUser(userRequest)
+                userRepo.save(userRequest.getCommunity() != null ?
+                    UserMapper.INSTANCE.requestToUser(
+                        userRequest, 
+                        communityRepo.findById(userRequest.getCommunity()).orElseThrow(
+                            () -> new CommunityErrorException("no community with this id"))) 
+                    : UserMapper.INSTANCE.requestToUser(userRequest)
                 )
             );
         else 
@@ -107,6 +116,7 @@ public class UserService {
         
         
     }
+
       //TODO: add method to fetch general info about user by its id
       
       //TODO: add method to fetch comments for user by its id

@@ -80,7 +80,7 @@ public class UserEntity {
         @JoinColumn(name = "board_id") })
     List<BoardEntity> boards;
 
-    @OneToMany(mappedBy = "uEntity"  , cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OneToMany(mappedBy = "uentity"  , cascade = CascadeType.ALL ,orphanRemoval = true)
     List<CommentEntity> comments;
 
     // @OneToOne(mappedBy = "admin")
