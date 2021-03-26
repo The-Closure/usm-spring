@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.util.Converter;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
@@ -18,7 +17,6 @@ import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.mapper.PostMapper;
 import org.closure.app.postModule.repositories.PostRepo;
-import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,25 +49,13 @@ public class PostService {
                     .withUEntity(userEntity)
                     .withPcommuninty(userEntity.getCommuninty())
             );
-        return new PostResponse()
-            .withAttach(postEntity.getAttach())
-            .withPostID(postEntity.getId())
-            .withTitle(postEntity.getTitle())
-            .withUserID(postEntity.getUEntity().getId())
-            .withCommunityID(postEntity.getPcommuninty().getId())
-            .withValue(postEntity.getValue());
+        return PostMapper.mapper.PostToResponse(postEntity);
     }
     public PostResponse getpost(Long id)
     {
         PostEntity pEntity = postRepo.findById(id).orElseThrow(
             () -> new PostErrorException("no post with this id"));
-        return new PostResponse()
-            .withAttach(pEntity.getAttach())
-            .withPostID(pEntity.getId())
-            .withTitle(pEntity.getTitle())
-            .withUserID(pEntity.getUEntity().getId())
-            .withCommunityID(pEntity.getPcommuninty().getId())
-            .withValue(pEntity.getValue());
+        return PostMapper.mapper.PostToResponse(pEntity);
     }
     public PostResponse updatePost(Long postID, Long userID, PostRequest request)
     {
@@ -85,13 +71,7 @@ public class PostService {
             .withTitle(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
             .withValue(request.getValue() != null ? request.getValue() : pEntity.getValue()));
             
-            return new PostResponse()
-                .withAttach(pEntity.getAttach())
-                .withPostID(pEntity.getId())
-                .withTitle(pEntity.getTitle())
-                .withUserID(pEntity.getUEntity().getId())
-                .withCommunityID(pEntity.getPcommuninty().getId())
-                .withValue(pEntity.getValue());
+            return PostMapper.mapper.PostToResponse(pEntity);
     }
     public boolean deletePost(Long postID, Long userID)
     {
@@ -121,8 +101,8 @@ public class PostService {
         Page<PostEntity> pagedResult = postRepo.findAll(paging);
          
         if(pagedResult.hasContent()) {
-            PostMapper mapper = Mappers.getMapper(PostMapper.class);
-            Page<PostResponse> response = pagedResult.map(mapper::PostToResponse);
+            
+            Page<PostResponse> response = pagedResult.map(PostMapper.mapper::PostToResponse);
             return response.getContent();
         } else {
             return new ArrayList<PostResponse>();

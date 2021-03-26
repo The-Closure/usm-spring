@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public abstract class PostMapper {   
    
+    public static PostMapper mapper = Mappers.getMapper(PostMapper.class);
+
     @Mapping(source = "id", target = "postID")
     @Mapping(target = "userID", expression = "java(post.getUEntity().getId())")
     @Mapping(target = "communityID", expression = "java(post.getPcommuninty().getId())")
