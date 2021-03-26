@@ -2,7 +2,7 @@ package org.closure.app.entities;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
+ 
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -44,7 +44,7 @@ public class PostEntity {
     private String title;
     private String value;
     private String attach;
-    @OneToMany(mappedBy = "pEntity" , cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pentity" , cascade = CascadeType.ALL)
     private List<LikeEntity> likes;
     @OneToMany(mappedBy = "pEntity" , cascade = CascadeType.ALL)
     private List<CommentEntity> comments;

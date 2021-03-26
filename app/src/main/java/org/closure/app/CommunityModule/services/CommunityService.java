@@ -1,10 +1,8 @@
 package org.closure.app.CommunityModule.services;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import org.closure.app.CommunityModule.dto.CommunityRequest;
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.CommunityModule.models.CommunityModel;
@@ -14,11 +12,10 @@ import org.closure.app.UserModule.models.UserModel;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
+import org.closure.app.postModule.dto.PostResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import io.swagger.models.Response;
 
 @Service
 public class CommunityService {
@@ -132,16 +129,14 @@ public class CommunityService {
         return responses;
     }
 
-    public CommunityModel edit(CommunityModel communityModel)
+    public CommunityResponse edit(CommunityModel communityModel)
     {
-        CommunityEntity communityEntity = communityRepo.findByName(communityModel.getName()).orElseThrow(
-            ()-> new CommunityErrorException("no community with this name"));
-        communityEntity
+           
+        return communityRepo.save(communityRepo.findById(communityModel.getId()).orElseThrow(
+            ()-> new CommunityErrorException("no community with this id"))
             .withDescription(communityModel.getDescription())
             .withImg(communityModel.getImg())
-            .withName(communityModel.getName());
-        communityRepo.save(communityEntity);
-        return communityModel;
+            .withName(communityModel.getName())).toCommunityResponse();
     }
 
     public List<CommunityModel> getAll()
@@ -178,6 +173,24 @@ public class CommunityService {
         return models;
     }
 
+    public List<PostResponse> getPosts(Long communityID)
+    {
+        CommunityEntity cEntity = communityRepo.findById(communityID).orElseThrow(
+            () -> new UserErrorException("no community with this id"));
+        List<PostResponse> postResponses = new ArrayList<>();
+        cEntity.getPosts().forEach(
+            (p) -> {
+                PostResponse postResponse = new PostResponse()
+                    .withAttach(p.getAttach())
+                    .withCommunityID(p.getPcommuninty().getId())
+                    .withPostID(p.getId())
+                    .withTitle(p.getTitle())
+                    .withUserID(p.getUEntity().getId())
+                    .withValue(p.getValue());
+                postResponses.add(postResponse);
+            });
+        return postResponses;
+    }
     
 }
 

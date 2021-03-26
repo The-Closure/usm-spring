@@ -13,5 +13,5 @@ public class UserRequest {
     private String name;
     private String email;
     private String password;
-    private int community;
+    private Long community;
 }

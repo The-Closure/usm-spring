@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import org.closure.app.entities.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
@@ -17,7 +19,8 @@ public interface UserRepo extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByIdAndName(Long id, String name);
 
-    List<UserEntity> findByEmailLikeOrNameLike(String email, String name);
+    @Query(value="select * from user  where name like %:keyword% or email like %:keyword%", nativeQuery=true)
+    List<UserEntity> findByEmailLikeOrNameLike(@Param("keyword") String keyword);
 
 
 }

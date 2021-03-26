@@ -1,7 +1,7 @@
 package org.closure.app.entities;
 
 import java.util.List;
-import java.util.Objects;
+ 
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,6 +11,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
+import org.closure.app.CommunityModule.dto.CommunityResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +34,7 @@ import lombok.With;
 public class CommunityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    Long id;
     private String name;
     private String description;
     // @OneToOne(fetch = FetchType.LAZY, optional = true)
@@ -43,5 +46,16 @@ public class CommunityEntity {
     @OneToMany(mappedBy = "pcommuninty")
     List<PostEntity> posts;
 
+    public CommunityResponse toCommunityResponse()
+    {
+        return new CommunityResponse()
+            .withDescription(description)
+            .withImg(img)
+            .withName(name);
+    }
+
+    public Object fromResponse(CommunityResponse findById) {
+        return null;
+    }
 
 }

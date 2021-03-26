@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import org.closure.app.UserModule.dto.UserResponse;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -70,7 +72,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "uEntity" ,cascade = CascadeType.ALL , orphanRemoval = true)
     List<PostEntity> posts;
 
-    @OneToMany(mappedBy = "uEntity" , cascade = CascadeType.ALL , orphanRemoval = true)
+    @OneToMany(mappedBy = "uentity" , cascade = CascadeType.ALL , orphanRemoval = true)
     List<LikeEntity> likes;
     
     @ManyToMany(cascade ={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
@@ -87,4 +89,11 @@ public class UserEntity {
      * constructors
      */
 
+     public UserResponse toUserResponse()
+     {
+         return new UserResponse()
+            .withId(id)
+            .withImg(img)
+            .withName(name);
+     }
 }
