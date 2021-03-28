@@ -14,11 +14,11 @@ public abstract class CommentMapper {
     
     public static CommentMapper INSTANCE = Mappers.getMapper(CommentMapper.class);
 
-    // @Mapping(target = "userID", expression = "java(entity.getUentity().getId())")
-    // @Mapping(target = "postID", expression = "java(entity.getPentity().getId())")
+    @Mapping(target = "userID", source = "entity.uentity.id")
+    @Mapping(target = "postID", source = "entity.pentity.id")
     public abstract CommentResponse commentToResponse(CommentEntity entity);
 
-    // @Mapping(target = "uEntity", expression  = "java(uEntity)")
-    // @Mapping(target = "pEntity", expression  = "java(pEntity)")
-    public abstract CommentEntity responseToComment(CommentRequest request);
+    @Mapping(target = "uEntity", source  = "uentity")
+    @Mapping(target = "pEntity", source  = "pentity")
+    public abstract CommentEntity requestToComment(CommentRequest request, UserEntity uentity, PostEntity pentity);
 }

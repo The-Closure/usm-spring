@@ -30,12 +30,14 @@ public class CommentService {
     {          
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save(
-                CommentMapper.INSTANCE.responseToComment(request)
-                .withPentity(postRepo.findById(postID).orElseThrow(
-                         () -> new PostErrorException("no post with this id")))
-                .withUentity(userRepo.findById(userID).orElseThrow(
-                            () -> new PostErrorException("no user with this id"))) 
-            ) 
+                CommentMapper.INSTANCE.requestToComment(
+                    request,
+                    userRepo.findById(postID).orElseThrow(
+                        () -> new PostErrorException("no post with this id")),
+                    postRepo.findById(userID).orElseThrow(
+                        () -> new PostErrorException("no user with this id"))
+                )
+            )
         );
     }
 
