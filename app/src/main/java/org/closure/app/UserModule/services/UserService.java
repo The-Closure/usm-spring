@@ -13,7 +13,8 @@ import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.boardModule.dto.BoardResponse;
 import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.boardModule.mapper.BoardMapper;
-import org.closure.app.entities.CommunityEntity;
+import org.closure.app.commentModule.dto.CommentResponse;
+import org.closure.app.commentModule.mapper.CommentMapper;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.mapper.PostMapper;
@@ -117,9 +118,18 @@ public class UserService {
         
     }
 
-      //TODO: add method to fetch general info about user by its id
+      //TODO: add method to fetch general info about user by its id(Unconvinced)
       
-      //TODO: add method to fetch comments for user by its id
+      public List<CommentResponse> getCommentsForUser(Long userID)
+    {
+        return userRepo.findById(userID).orElseThrow(
+            ()-> new UserErrorException("no post with this id"))
+            .getComments()
+            .stream()
+            .map(
+                CommentMapper.INSTANCE::commentToResponse
+            ).toList();
+    }
 
 
 
