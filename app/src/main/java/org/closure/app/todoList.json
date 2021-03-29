@@ -1,7 +1,0 @@
-{
-    "comments": ["delete", "edit"],
-    "community": ["edit search function"],
-    "post": ["get all posts", "edit post"],
-    "prof": ["delete"],
-    "user": ["delete user"]
-}
