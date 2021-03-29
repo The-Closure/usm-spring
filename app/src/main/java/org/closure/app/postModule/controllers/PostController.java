@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.UserModule.dto.UserResponse;
+import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.postModule.dto.PostRequest;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.services.PostService;
@@ -79,10 +80,21 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> getAllPosts(
                         @RequestParam(defaultValue = "0") Integer pageNo, 
                         @RequestParam(defaultValue = "10") Integer pageSize,
+                        @RequestParam(name = "communityID") Long communityID,
                         @RequestParam(defaultValue = "id") String sortBy) 
     {
-        List<PostResponse> list = postService.getAllPosts(pageNo, pageSize, sortBy);
+        List<PostResponse> list = postService.getAllPosts(communityID, pageNo, pageSize, sortBy);
  
         return new ResponseEntity<List<PostResponse>>(list, new HttpHeaders(), HttpStatus.OK); 
     }
+
+    @GetMapping(value="/getcomments/{postID}")
+    public ResponseEntity<List<CommentResponse>> getCommentsForPost(@PathVariable(name = "postID") Long postID) {
+        return new ResponseEntity<List<CommentResponse>>(
+            postService.getCommentsForPost(postID), 
+            new HttpHeaders(), 
+            HttpStatus.OK
+        ); 
+    }
+    
 }
