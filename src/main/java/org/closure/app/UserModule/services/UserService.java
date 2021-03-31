@@ -51,7 +51,7 @@ public class UserService {
              userRepo.save(
                  userRepo.findByEmailAndPassword(email, password).orElseThrow(
                     () -> new UserErrorException(email+"error in email or password")
-                ).withFlag(true)
+                ).flag(true)
             )
         );
     }
@@ -64,7 +64,7 @@ public class UserService {
     public boolean signout(Long id, String name)
     {
         userRepo.save(userRepo.findByIdAndName(id, name).orElseThrow(
-            () -> new UserErrorException("error in id or name")).withFlag(false));
+            () -> new UserErrorException("error in id or name")).flag(false));
         return !userRepo.findByIdAndName(id, name).get().isFlag();
     }
     public UserModel edit(UserModel userModel)
@@ -72,15 +72,15 @@ public class UserService {
         UserEntity user = userRepo.findByIdAndPassword(Long.valueOf(userModel.getId()), userModel.getPassword()).orElseThrow(
             () -> new UserErrorException("error in email or password"));
         user
-         .withAge(userModel.getAge())
-         .withName(userModel.getName())
-         .withPassword(userModel.getPassword())
-         .withEmail(userModel.getEmail())
-         .withUniversity(userModel.getUniversity())
-         .withImg(userModel.getImg())
-         .withCommunity_name(userModel.getCommunity_name())
-         .withStudy_year(userModel.getStudy_year())       
-         .withStart_year(userModel.getStart_year());
+         .age(userModel.getAge())
+         .name(userModel.getName())
+         .password(userModel.getPassword())
+         .email(userModel.getEmail())
+         .university(userModel.getUniversity())
+         .img(userModel.getImg())
+         .community_name(userModel.getCommunity_name())
+         .study_year(userModel.getStudy_year())       
+         .start_year(userModel.getStart_year());
         userRepo.save(user);
         return userModel;    
     }

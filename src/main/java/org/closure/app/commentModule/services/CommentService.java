@@ -56,7 +56,7 @@ public class CommentService {
             () -> new UserErrorException("no post with this id"));
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save( commentRepo.findById(commentID).orElseThrow(
-                    () -> new UserErrorException("no comment with this id")).withValue(commentRequest.getValue())));
+                    () -> new UserErrorException("no comment with this id")).value(commentRequest.getValue())));
     }
 
     public boolean deleteComment(Long userID, Long commentID)

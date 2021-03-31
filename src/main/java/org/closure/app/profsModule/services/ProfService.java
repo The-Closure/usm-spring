@@ -59,7 +59,7 @@ public class ProfService {
         List<ProfsEntity> pentities = bEntity.getProfs();
         if(pentities.stream().anyMatch((p) -> p.getId().equals(profID))) return false;
         pentities.add(pentity);
-        bEntity = bEntity.withProfs(pentities);
+        bEntity = bEntity.profs(pentities);
         boardRepo.save(bEntity);
         return true;
     }
@@ -72,7 +72,7 @@ public class ProfService {
         List<ProfsEntity> pentities = bEntity.getProfs();
         if(pentities.stream().allMatch((p) -> !p.getId().equals(profID))) return false;
         pentities.remove(pentity);
-        bEntity = bEntity.withProfs(pentities);
+        bEntity = bEntity.profs(pentities);
         boardRepo.save(bEntity);
         return true;
     }

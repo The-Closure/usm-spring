@@ -48,12 +48,12 @@ public class PostService {
         PostEntity postEntity = postRepo.save
             (
                 new PostEntity()
-                    .withAttach(request.getAttach())
-                    .withCreated_at(new Date())
-                    .withTitle(request.getTitle())
-                    .withValue(request.getValue())
-                    .withUEntity(userEntity)
-                    .withPcommuninty(userEntity.getCommuninty())
+                    .attach(request.getAttach())
+                    .created_at(new Date())
+                    .title(request.getTitle())
+                    .value(request.getValue())
+                    .uEntity(userEntity)
+                    .pcommuninty(userEntity.getCommuninty())
             );
         return PostMapper.mapper.PostToResponse(postEntity);
     }
@@ -73,9 +73,9 @@ public class PostService {
                         (p) -> !p.getId().equals(postID))) 
                             throw new PostErrorException("you don't have permissions to edit this post");
             pEntity = postRepo.save(pEntity 
-            .withAttach(request.getAttach() != null ? request.getAttach() : pEntity.getAttach())
-            .withTitle(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
-            .withValue(request.getValue() != null ? request.getValue() : pEntity.getValue()));
+            .attach(request.getAttach() != null ? request.getAttach() : pEntity.getAttach())
+            .title(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
+            .value(request.getValue() != null ? request.getValue() : pEntity.getValue()));
             
             return PostMapper.mapper.PostToResponse(pEntity);
     }

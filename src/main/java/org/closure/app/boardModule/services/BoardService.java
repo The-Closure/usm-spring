@@ -50,9 +50,9 @@ public class BoardService {
         return BoardMapper.INSTANCE.boardToResponse(boardRepository.save(
             boardRepository.findById(id).orElseThrow(
                 () -> new BoardErrorException("no board with this id"))
-                    .withDescription(boardModel.getDescription()) 
-                    .withImage(boardModel.getImage())
-                    .withName(boardModel.getName())
+                    .description(boardModel.getDescription()) 
+                    .image(boardModel.getImage())
+                    .name(boardModel.getName())
             )
         );
     }
@@ -87,7 +87,7 @@ public class BoardService {
         boardRepository.findById(boardID).orElseThrow(
             () -> new BoardErrorException("no board with this id"));
         boardEntities = boardEntities.stream().filter((e) -> !e.getId().equals(boardID)).toList();    
-        userRepo.save(user.withBoards(boardEntities));
+        userRepo.save(user.boards(boardEntities));
         return true;
     }
     public List<UserResponse> getUsers(Long boardID)

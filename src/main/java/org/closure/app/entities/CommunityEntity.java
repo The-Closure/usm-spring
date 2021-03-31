@@ -1,7 +1,7 @@
 package org.closure.app.entities;
 
 import java.util.List;
- 
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,23 +14,18 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.With;
+import lombok.Getter;
+import lombok.Setter;
 @Entity
-@Data
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@With
 @Table(name = "communities")
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
     property = "id"
 )
-
 public class CommunityEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -49,13 +44,10 @@ public class CommunityEntity {
     public CommunityResponse toCommunityResponse()
     {
         return new CommunityResponse()
-            .withDescription(description)
-            .withImg(img)
-            .withName(name);
+            .description(description)
+            .img(img)
+            .name(name);
     }
 
-    public Object fromResponse(CommunityResponse findById) {
-        return null;
-    }
-
+  
 }
