@@ -1,15 +1,20 @@
 package org.closure.app.CommunityModule.models;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.With;
 
-@Data
+@Getter @Setter 
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
-@With
+@EqualsAndHashCode
 @ToString
 public class CommunityModel {
     private Long id;

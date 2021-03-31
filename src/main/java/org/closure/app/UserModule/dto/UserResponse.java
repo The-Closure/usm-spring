@@ -1,14 +1,21 @@
 package org.closure.app.UserModule.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
-@Data
+@Getter @Setter 
+@RequiredArgsConstructor
 @AllArgsConstructor
-@NoArgsConstructor
 @With
+@ToString 
+@EqualsAndHashCode
 public class UserResponse {
     private Long id;
     private String name;

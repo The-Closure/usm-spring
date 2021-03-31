@@ -17,12 +17,19 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import lombok.NoArgsConstructor;
 import lombok.With;@Entity
-@Data
+@Getter @Setter 
+@RequiredArgsConstructor
+@ToString 
+@EqualsAndHashCode
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 @With
 @Table(name = "boards")

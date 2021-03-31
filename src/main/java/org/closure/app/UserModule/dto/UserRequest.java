@@ -1,14 +1,20 @@
 package org.closure.app.UserModule.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-@Data
+@Getter @Setter 
+@RequiredArgsConstructor
+@ToString 
+@EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor
-@ToString
 public class UserRequest {
     private String name;
     private String email;

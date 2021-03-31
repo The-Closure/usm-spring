@@ -25,14 +25,22 @@ import org.closure.app.UserModule.dto.UserResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.With;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
 @Entity
-@Data
+@Getter @Setter 
+@RequiredArgsConstructor
+@ToString 
+@EqualsAndHashCode
 @Builder
-@NoArgsConstructor
+ 
 @AllArgsConstructor
 @With
 @Table(name = "user")
