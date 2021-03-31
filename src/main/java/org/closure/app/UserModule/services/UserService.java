@@ -120,16 +120,18 @@ public class UserService {
 
       //TODO: add method to fetch general info about user by its id(Unconvinced)
       
-      public List<CommentResponse> getCommentsForUser(Long userID)
+    public List<CommentResponse> getCommentsForUser(Long userID)
     {
         return userRepo.findById(userID).orElseThrow(
             ()-> new UserErrorException("no post with this id"))
-            .getComments()
-            .stream()
-            .map(
-                CommentMapper.INSTANCE::commentToResponse
-            ).toList();
+        .getComments()
+        .stream()
+        .map(
+            CommentMapper.INSTANCE::commentToResponse
+        ).toList();
     }
+
+    
 
 
 

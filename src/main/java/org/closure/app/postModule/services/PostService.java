@@ -7,9 +7,12 @@ import java.util.List;
 
 import org.closure.app.CommunityModule.dto.CommunityResponse;
 import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
+import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
+import org.closure.app.commentModule.dto.CommentResponse;
+import org.closure.app.commentModule.mapper.CommentMapper;
 import org.closure.app.entities.PostEntity;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostRequest;
@@ -32,6 +35,9 @@ public class PostService {
 
     @Autowired
     UserRepo userRepo;
+
+    @Autowired
+    CommunityRepo communityRepo;
 
     public PostResponse addPost(Long userID, PostRequest request)
     {
@@ -95,10 +101,14 @@ public class PostService {
             () -> new PostErrorException("no post with this id"))
                 .getUEntity().toUserResponse();
     }
-    public List<PostResponse> getAllPosts(Integer pageNo, Integer pageSize, String sortBy) {
+    public List<PostResponse> getAllPosts(Long communityID, Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
  
-        Page<PostEntity> pagedResult = postRepo.findAll(paging);
+        Page<PostEntity> pagedResult = postRepo.findAllByPcommuninty(
+            communityRepo.findById(communityID).orElseThrow(
+                ()-> new CommunityErrorException("no community with this id")), 
+            paging
+        );
          
         if(pagedResult.hasContent()) {
             
@@ -109,6 +119,16 @@ public class PostService {
         }
     }
 
-    //TODO: add method to fetch comments for post
+    public List<CommentResponse> getCommentsForPost(Long postID)
+    {
+        return postRepo.findById(postID).orElseThrow(
+            ()-> new PostErrorException("no post with this id"))
+            .getComments()
+            .stream()
+            .map(
+                CommentMapper.INSTANCE::commentToResponse
+            ).toList();
+    }
+
 
 }
