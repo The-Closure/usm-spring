@@ -3,10 +3,7 @@ package org.closure.app.commentModule.mapper;
 import org.closure.app.commentModule.dto.CommentRequest;
 import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.entities.CommentEntity;
-import org.closure.app.entities.PostEntity;
-import org.closure.app.entities.UserEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
