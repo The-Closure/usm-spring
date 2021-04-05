@@ -25,7 +25,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.closure.app.UserModule.dto.UserResponse;
 
 
-import javax.persistence.Entity; 
 @Entity
 @Table(name = "user")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
