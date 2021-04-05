@@ -129,6 +129,15 @@ public class PostService {
                 CommentMapper.INSTANCE::commentToResponse
             ).toList();
     }
+    
+    public List<PostResponse> getBestPosts(Long userID)
+    {
+        return userRepo.findById(userID).orElseThrow(
+            ()-> new UserErrorException("no user with this id")).getCommuninty().getPosts().stream().filter((predicate) ->{
+                return predicate.getCreated_at().after(new Date(new Date().getTime() - 86400000*3));
+            }).map(PostMapper.mapper::PostToResponse).toList().subList(0, 2);
+    }
+
 
 
 }
