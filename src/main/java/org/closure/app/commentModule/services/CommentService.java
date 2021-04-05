@@ -9,10 +9,12 @@ import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.commentModule.exceptions.CommentErrorException;
 import org.closure.app.commentModule.mapper.CommentMapper;
 import org.closure.app.commentModule.repositories.CommentRepo;
+import org.closure.app.entities.CommentEntity;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 
 @Service
 public class CommentService {
@@ -30,15 +32,17 @@ public class CommentService {
     {          
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save(
-                CommentMapper.INSTANCE.requestToComment(
-                    request,
-                    userRepo.findById(postID).orElseThrow(
-                        () -> new PostErrorException("no post with this id")),
-                    postRepo.findById(userID).orElseThrow(
-                        () -> new PostErrorException("no user with this id"))
+                new CommentEntity().value(request.getValue()).pentity(
+                    postRepo.findById(postID).orElseThrow(
+                        ()->new PostErrorException("no post with this id")
+                    )
+                ).uentity(
+                    userRepo.findById(userID).orElseThrow(
+                        ()-> new UserErrorException("no user with this id")
+                    )
                 )
             )
-        );
+        ).postID(postID).userID(userID);
     }
 
     public CommentResponse getComment(Long commentID)
