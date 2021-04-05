@@ -63,6 +63,7 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+<<<<<<< HEAD
 				<configuration>
 					<annotationProcessorPaths>
 						<path>
@@ -78,6 +79,8 @@
 						</compilerArg>
 					</compilerArgs>
 				</configuration>
+=======
+>>>>>>> a01f225a9c8df06ffce8845e110f0e7c10af71e5
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
