@@ -19,6 +19,8 @@ import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,7 +30,9 @@ public class UserService {
 
     @Autowired
     private CommunityRepo communityRepo;
- 
+    
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     public UserResponse addUser(UserRequest userRequest)
     {
@@ -131,7 +135,18 @@ public class UserService {
         ).toList();
     }
 
-    
+    public boolean sendEmail(String id, String email)
+    {
+        SimpleMailMessage msg = new SimpleMailMessage();
+        msg.setFrom("support@smart-mira.com");
+        msg.setTo(email);
+
+        msg.setSubject("Verfication mail (Magic Mirror)");
+        msg.setText("thanks for joining our platform \nplease verify your account by this link : http://localhost:8080/api/v2/users/home/verifyaccount/"+id);
+
+        javaMailSender.send(msg);
+        return true;
+    }
 
 
 
