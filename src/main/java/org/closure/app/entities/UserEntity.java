@@ -52,6 +52,7 @@ public class UserEntity {
     @JsonFormat(pattern = "yyyy-mm-dd")
     private Date created_at;
     private String img;
+    private boolean is_Activated;
 
     /**
      * relational attrs
@@ -80,19 +81,10 @@ public class UserEntity {
      * constructors
      */
 
-     public UserResponse toUserResponse()
-     {
-         return new UserResponse()
-            .id(id)
-            .img(img)
-            .name(name);
-     }
-
-
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String name, String email, String password, String university, String community_name, Integer study_year, Date start_year, Date age, boolean flag, Date created_at, String img, CommunityEntity communinty, List<PostEntity> posts, List<LikeEntity> likes, List<BoardEntity> boards, List<CommentEntity> comments) {
+    public UserEntity(Long id, String name, String email, String password, String university, String community_name, Integer study_year, Date start_year, Date age, boolean flag, Date created_at, String img, boolean is_Activated, CommunityEntity communinty, List<PostEntity> posts, List<LikeEntity> likes, List<BoardEntity> boards, List<CommentEntity> comments) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -105,6 +97,7 @@ public class UserEntity {
         this.flag = flag;
         this.created_at = created_at;
         this.img = img;
+        this.is_Activated = is_Activated;
         this.communinty = communinty;
         this.posts = posts;
         this.likes = likes;
@@ -212,6 +205,18 @@ public class UserEntity {
         this.img = img;
     }
 
+    public boolean isIs_Activated() {
+        return this.is_Activated;
+    }
+
+    public boolean getIs_Activated() {
+        return this.is_Activated;
+    }
+
+    public void setIs_Activated(boolean is_Activated) {
+        this.is_Activated = is_Activated;
+    }
+
     public CommunityEntity getCommuninty() {
         return this.communinty;
     }
@@ -312,6 +317,11 @@ public class UserEntity {
         return this;
     }
 
+    public UserEntity is_Activated(boolean is_Activated) {
+        setIs_Activated(is_Activated);
+        return this;
+    }
+
     public UserEntity communinty(CommunityEntity communinty) {
         setCommuninty(communinty);
         return this;
@@ -345,12 +355,12 @@ public class UserEntity {
             return false;
         }
         UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) && Objects.equals(name, userEntity.name) && Objects.equals(email, userEntity.email) && Objects.equals(password, userEntity.password) && Objects.equals(university, userEntity.university) && Objects.equals(community_name, userEntity.community_name) && Objects.equals(study_year, userEntity.study_year) && Objects.equals(start_year, userEntity.start_year) && Objects.equals(age, userEntity.age) && flag == userEntity.flag && Objects.equals(created_at, userEntity.created_at) && Objects.equals(img, userEntity.img) && Objects.equals(communinty, userEntity.communinty) && Objects.equals(posts, userEntity.posts) && Objects.equals(likes, userEntity.likes) && Objects.equals(boards, userEntity.boards) && Objects.equals(comments, userEntity.comments);
+        return Objects.equals(id, userEntity.id) && Objects.equals(name, userEntity.name) && Objects.equals(email, userEntity.email) && Objects.equals(password, userEntity.password) && Objects.equals(university, userEntity.university) && Objects.equals(community_name, userEntity.community_name) && Objects.equals(study_year, userEntity.study_year) && Objects.equals(start_year, userEntity.start_year) && Objects.equals(age, userEntity.age) && flag == userEntity.flag && Objects.equals(created_at, userEntity.created_at) && Objects.equals(img, userEntity.img) && is_Activated == userEntity.is_Activated && Objects.equals(communinty, userEntity.communinty) && Objects.equals(posts, userEntity.posts) && Objects.equals(likes, userEntity.likes) && Objects.equals(boards, userEntity.boards) && Objects.equals(comments, userEntity.comments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, university, community_name, study_year, start_year, age, flag, created_at, img, communinty, posts, likes, boards, comments);
+        return Objects.hash(id, name, email, password, university, community_name, study_year, start_year, age, flag, created_at, img, is_Activated, communinty, posts, likes, boards, comments);
     }
 
     @Override
@@ -368,6 +378,7 @@ public class UserEntity {
             ", flag='" + isFlag() + "'" +
             ", created_at='" + getCreated_at() + "'" +
             ", img='" + getImg() + "'" +
+            ", is_Activated='" + isIs_Activated() + "'" +
             ", communinty='" + getCommuninty() + "'" +
             ", posts='" + getPosts() + "'" +
             ", likes='" + getLikes() + "'" +
@@ -375,5 +386,6 @@ public class UserEntity {
             ", comments='" + getComments() + "'" +
             "}";
     }
+
 
 }

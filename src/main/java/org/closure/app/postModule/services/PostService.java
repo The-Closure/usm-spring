@@ -10,6 +10,7 @@ import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
+import org.closure.app.UserModule.mapper.UserMapper;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.commentModule.mapper.CommentMapper;
@@ -97,9 +98,9 @@ public class PostService {
     }
     public UserResponse getUser(Long postID)
     {
-        return postRepo.findById(postID).orElseThrow(
+        return UserMapper.INSTANCE.userToResponse(postRepo.findById(postID).orElseThrow(
             () -> new PostErrorException("no post with this id"))
-                .getUEntity().toUserResponse();
+                .getUEntity());
     }
     public List<PostResponse> getAllPosts(Long communityID, Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
