@@ -17,6 +17,7 @@ public abstract class UserMapper {
 
 
     public abstract UserResponse userToResponse(UserEntity user);
+    public abstract UserEntity responseToUser(UserResponse user);
 
 
     public abstract UserModel userToModel(UserEntity user);
@@ -32,7 +33,5 @@ public abstract class UserMapper {
         flag(true).            
         communinty(community[0]).
         community_name(community[0].getName());
-   
-
     }
 }

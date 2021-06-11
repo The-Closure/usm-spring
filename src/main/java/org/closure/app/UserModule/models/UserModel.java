@@ -3,6 +3,8 @@ package org.closure.app.UserModule.models;
 import java.util.Date;
 import java.util.Objects;
 
+import org.closure.app.CommunityModule.models.CommunityModel;
+
 
 public class UserModel {
 
@@ -16,11 +18,12 @@ public class UserModel {
     private Integer  study_year ;
     private Date  start_year ;
     private Date  age ;
+    private CommunityModel community;
 
     public UserModel() {
     }
 
-    public UserModel(Long id, String name, String email, String password, String university, String img, String community_name, Integer study_year, Date start_year, Date age) {
+    public UserModel(Long id, String name, String email, String password, String university, String img, String community_name, Integer study_year, Date start_year, Date age, CommunityModel community) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -31,6 +34,7 @@ public class UserModel {
         this.study_year = study_year;
         this.start_year = start_year;
         this.age = age;
+        this.community = community;
     }
 
     public Long getId() {
@@ -113,6 +117,14 @@ public class UserModel {
         this.age = age;
     }
 
+    public CommunityModel getCommunity() {
+        return this.community;
+    }
+
+    public void setCommunity(CommunityModel community) {
+        this.community = community;
+    }
+
     public UserModel id(Long id) {
         setId(id);
         return this;
@@ -163,6 +175,11 @@ public class UserModel {
         return this;
     }
 
+    public UserModel community(CommunityModel community) {
+        setCommunity(community);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -171,12 +188,12 @@ public class UserModel {
             return false;
         }
         UserModel userModel = (UserModel) o;
-        return Objects.equals(id, userModel.id) && Objects.equals(name, userModel.name) && Objects.equals(email, userModel.email) && Objects.equals(password, userModel.password) && Objects.equals(university, userModel.university) && Objects.equals(img, userModel.img) && Objects.equals(community_name, userModel.community_name) && Objects.equals(study_year, userModel.study_year) && Objects.equals(start_year, userModel.start_year) && Objects.equals(age, userModel.age);
+        return Objects.equals(id, userModel.id) && Objects.equals(name, userModel.name) && Objects.equals(email, userModel.email) && Objects.equals(password, userModel.password) && Objects.equals(university, userModel.university) && Objects.equals(img, userModel.img) && Objects.equals(community_name, userModel.community_name) && Objects.equals(study_year, userModel.study_year) && Objects.equals(start_year, userModel.start_year) && Objects.equals(age, userModel.age) && Objects.equals(community, userModel.community);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, university, img, community_name, study_year, start_year, age);
+        return Objects.hash(id, name, email, password, university, img, community_name, study_year, start_year, age, community);
     }
 
     @Override
@@ -192,7 +209,9 @@ public class UserModel {
             ", study_year='" + getStudy_year() + "'" +
             ", start_year='" + getStart_year() + "'" +
             ", age='" + getAge() + "'" +
+            ", community='" + getCommunity() + "'" +
             "}";
     }
+
 
 }
