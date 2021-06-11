@@ -2,14 +2,23 @@ package org.closure.app.UserModule.dto;
 
 import java.util.Objects;
 
+import org.closure.app.CommunityModule.models.CommunityModel;
+
 public class UserResponse {
     private Long id;
     private String name;
     private String img;
+    private CommunityModel communinty;
 
     public UserResponse() {
     }
 
+    public UserResponse(Long id, String name, String img, CommunityModel communinty) {
+        this.id = id;
+        this.name = name;
+        this.img = img;
+        this.communinty = communinty;
+    }
     public UserResponse(Long id, String name, String img) {
         this.id = id;
         this.name = name;
@@ -40,6 +49,14 @@ public class UserResponse {
         this.img = img;
     }
 
+    public CommunityModel getCommuninty() {
+        return this.communinty;
+    }
+
+    public void setCommuninty(CommunityModel communinty) {
+        this.communinty = communinty;
+    }
+
     public UserResponse id(Long id) {
         setId(id);
         return this;
@@ -55,6 +72,11 @@ public class UserResponse {
         return this;
     }
 
+    public UserResponse communinty(CommunityModel communinty) {
+        setCommuninty(communinty);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -63,12 +85,12 @@ public class UserResponse {
             return false;
         }
         UserResponse userResponse = (UserResponse) o;
-        return Objects.equals(id, userResponse.id) && Objects.equals(name, userResponse.name) && Objects.equals(img, userResponse.img);
+        return Objects.equals(id, userResponse.id) && Objects.equals(name, userResponse.name) && Objects.equals(img, userResponse.img) && Objects.equals(communinty, userResponse.communinty);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, img);
+        return Objects.hash(id, name, img, communinty);
     }
 
     @Override
@@ -77,7 +99,8 @@ public class UserResponse {
             " id='" + getId() + "'" +
             ", name='" + getName() + "'" +
             ", img='" + getImg() + "'" +
+            ", communinty='" + getCommuninty() + "'" +
             "}";
     }
-
+    
 }

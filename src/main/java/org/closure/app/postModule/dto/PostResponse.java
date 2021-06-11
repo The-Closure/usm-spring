@@ -2,20 +2,25 @@ package org.closure.app.postModule.dto;
 
 import java.util.Objects;
 
+import org.closure.app.UserModule.dto.UserResponse;
+
 public class PostResponse {
     private Long postID;
     private Long userID; 
+    private UserResponse uEntity;
     private Long communityID;
     private String title;
     private String value;
     private String attach; 
 
+
     public PostResponse() {
     }
 
-    public PostResponse(Long postID, Long userID, Long communityID, String title, String value, String attach) {
+    public PostResponse(Long postID, Long userID, UserResponse uEntity, Long communityID, String title, String value, String attach) {
         this.postID = postID;
         this.userID = userID;
+        this.uEntity = uEntity;
         this.communityID = communityID;
         this.title = title;
         this.value = value;
@@ -36,6 +41,14 @@ public class PostResponse {
 
     public void setUserID(Long userID) {
         this.userID = userID;
+    }
+
+    public UserResponse getUEntity() {
+        return this.uEntity;
+    }
+
+    public void setUEntity(UserResponse uEntity) {
+        this.uEntity = uEntity;
     }
 
     public Long getCommunityID() {
@@ -80,6 +93,11 @@ public class PostResponse {
         return this;
     }
 
+    public PostResponse uEntity(UserResponse uEntity) {
+        setUEntity(uEntity);
+        return this;
+    }
+
     public PostResponse communityID(Long communityID) {
         setCommunityID(communityID);
         return this;
@@ -108,12 +126,12 @@ public class PostResponse {
             return false;
         }
         PostResponse postResponse = (PostResponse) o;
-        return Objects.equals(postID, postResponse.postID) && Objects.equals(userID, postResponse.userID) && Objects.equals(communityID, postResponse.communityID) && Objects.equals(title, postResponse.title) && Objects.equals(value, postResponse.value) && Objects.equals(attach, postResponse.attach);
+        return Objects.equals(postID, postResponse.postID) && Objects.equals(userID, postResponse.userID) && Objects.equals(uEntity, postResponse.uEntity) && Objects.equals(communityID, postResponse.communityID) && Objects.equals(title, postResponse.title) && Objects.equals(value, postResponse.value) && Objects.equals(attach, postResponse.attach);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postID, userID, communityID, title, value, attach);
+        return Objects.hash(postID, userID, uEntity, communityID, title, value, attach);
     }
 
     @Override
@@ -121,11 +139,13 @@ public class PostResponse {
         return "{" +
             " postID='" + getPostID() + "'" +
             ", userID='" + getUserID() + "'" +
+            ", uEntity='" + getUEntity() + "'" +
             ", communityID='" + getCommunityID() + "'" +
             ", title='" + getTitle() + "'" +
             ", value='" + getValue() + "'" +
             ", attach='" + getAttach() + "'" +
             "}";
     }
+    
 
 }

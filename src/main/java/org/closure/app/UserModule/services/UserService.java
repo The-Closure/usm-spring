@@ -54,7 +54,7 @@ public class UserService {
          return  UserMapper.INSTANCE.userToResponse(
              userRepo.save(
                  userRepo.findByEmailAndPassword(email, password).orElseThrow(
-                    () -> new UserErrorException(email+"error in email or password")
+                    () -> new UserErrorException(email+" error in email or password")
                 ).flag(true)
             )
         );

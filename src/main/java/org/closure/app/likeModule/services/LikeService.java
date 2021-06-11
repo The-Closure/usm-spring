@@ -2,6 +2,7 @@ package org.closure.app.likeModule.services;
 
 import java.util.List;
 
+import org.closure.app.CommunityModule.mapper.CommunityMapper;
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
@@ -56,8 +57,7 @@ public class LikeService {
                             (
                                 mapper.getUentity().getId(),
                                 mapper.getUentity().getName(),
-                                mapper.getUentity().getImg()
-                            )
+                                mapper.getUentity().getImg() )
                         )
                 )
             .toList();
