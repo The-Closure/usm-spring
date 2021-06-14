@@ -39,6 +39,9 @@ public class PostService {
 
     @Autowired
     CommunityRepo communityRepo;
+    
+    @Autowired
+    PostMapper postMapper;
 
     public PostResponse addPost(Long userID, PostRequest request)
     {
@@ -56,13 +59,13 @@ public class PostService {
                     .uEntity(userEntity)
                     .pcommuninty(userEntity.getCommuninty())
             );
-        return PostMapper.mapper.PostToResponse(postEntity);
+        return postMapper.PostToResponse(postEntity,userID);
     }
     public PostResponse getpost(Long id)
     {
         PostEntity pEntity = postRepo.findById(id).orElseThrow(
             () -> new PostErrorException("no post with this id"));
-        return PostMapper.mapper.PostToResponse(pEntity);
+        return postMapper.PostToResponse(pEntity,0l); // zero to return ppst without like state
     }
     public PostResponse updatePost(Long postID, Long userID, PostRequest request)
     {
@@ -78,7 +81,7 @@ public class PostService {
             .title(request.getTitle() != null ? request.getTitle() : pEntity.getTitle())
             .value(request.getValue() != null ? request.getValue() : pEntity.getValue()));
             
-            return PostMapper.mapper.PostToResponse(pEntity);
+            return postMapper.PostToResponse(pEntity,userID); // zero to return ppst without like state
     }
     public boolean deletePost(Long postID, Long userID)
     {
@@ -102,7 +105,7 @@ public class PostService {
             () -> new PostErrorException("no post with this id"))
                 .getUEntity());
     }
-    public List<PostResponse> getAllPosts(Long communityID, Integer pageNo, Integer pageSize, String sortBy) {
+    public List<PostResponse> getAllPosts(Long communityID, Integer pageNo, Integer pageSize, String sortBy,Long userID) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
  
         Page<PostEntity> pagedResult = postRepo.findAllByPcommuninty(
@@ -113,7 +116,7 @@ public class PostService {
          
         if(pagedResult.hasContent()) {
             
-            Page<PostResponse> response = pagedResult.map(PostMapper.mapper::PostToResponse);
+            Page<PostResponse> response = pagedResult.map((e)-> postMapper.PostToResponse(e, userID));
             return response.getContent();
         } else {
             return new ArrayList<PostResponse>();
@@ -136,9 +139,12 @@ public class PostService {
         return userRepo.findById(userID).orElseThrow(
             ()-> new UserErrorException("no user with this id")).getCommuninty().getPosts().stream().filter((predicate) ->{
                 return predicate.getCreated_at().after(new Date(new Date().getTime() - 86400000*3));
-            }).map(PostMapper.mapper::PostToResponse).toList().subList(0, 2);
+            }).map((e)-> postMapper.PostToResponse(e, userID)).toList().subList(0, 2);
     }
 
-
+    public boolean checkUserLikeOnPost(Long userID,Long postID)
+    {     
+        return userRepo.findById(userID).orElseThrow(()-> new UserErrorException("no user with this id")).getLikes().stream().anyMatch((l)-> l.getPentity().getId().equals(postID)&&l.getUentity().getId().equals(userID));
+    }
 
 }

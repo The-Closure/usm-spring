@@ -12,12 +12,14 @@ public class PostResponse {
     private String title;
     private String value;
     private String attach; 
+    private boolean likeState;
+
 
 
     public PostResponse() {
     }
 
-    public PostResponse(Long postID, Long userID, UserResponse uEntity, Long communityID, String title, String value, String attach) {
+    public PostResponse(Long postID, Long userID, UserResponse uEntity, Long communityID, String title, String value, String attach, boolean likeState) {
         this.postID = postID;
         this.userID = userID;
         this.uEntity = uEntity;
@@ -25,6 +27,7 @@ public class PostResponse {
         this.title = title;
         this.value = value;
         this.attach = attach;
+        this.likeState = likeState;
     }
 
     public Long getPostID() {
@@ -83,6 +86,18 @@ public class PostResponse {
         this.attach = attach;
     }
 
+    public boolean isLikeState() {
+        return this.likeState;
+    }
+
+    public boolean getLikeState() {
+        return this.likeState;
+    }
+
+    public void setLikeState(boolean likeState) {
+        this.likeState = likeState;
+    }
+
     public PostResponse postID(Long postID) {
         setPostID(postID);
         return this;
@@ -118,6 +133,11 @@ public class PostResponse {
         return this;
     }
 
+    public PostResponse likeState(boolean likeState) {
+        setLikeState(likeState);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -126,12 +146,12 @@ public class PostResponse {
             return false;
         }
         PostResponse postResponse = (PostResponse) o;
-        return Objects.equals(postID, postResponse.postID) && Objects.equals(userID, postResponse.userID) && Objects.equals(uEntity, postResponse.uEntity) && Objects.equals(communityID, postResponse.communityID) && Objects.equals(title, postResponse.title) && Objects.equals(value, postResponse.value) && Objects.equals(attach, postResponse.attach);
+        return Objects.equals(postID, postResponse.postID) && Objects.equals(userID, postResponse.userID) && Objects.equals(uEntity, postResponse.uEntity) && Objects.equals(communityID, postResponse.communityID) && Objects.equals(title, postResponse.title) && Objects.equals(value, postResponse.value) && Objects.equals(attach, postResponse.attach) && likeState == postResponse.likeState;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postID, userID, uEntity, communityID, title, value, attach);
+        return Objects.hash(postID, userID, uEntity, communityID, title, value, attach, likeState);
     }
 
     @Override
@@ -144,6 +164,7 @@ public class PostResponse {
             ", title='" + getTitle() + "'" +
             ", value='" + getValue() + "'" +
             ", attach='" + getAttach() + "'" +
+            ", likeState='" + isLikeState() + "'" +
             "}";
     }
     

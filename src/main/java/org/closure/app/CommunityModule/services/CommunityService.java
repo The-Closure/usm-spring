@@ -28,6 +28,9 @@ public class CommunityService {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    PostMapper postMapper;
+
     public CommunityResponse findByUsers(UserEntity userEntity)
     {
         return CommunityMapper.INSTANCE.communityToResponse(
@@ -138,13 +141,13 @@ public class CommunityService {
       
     }
 
-    public List<PostResponse> getPosts(Long communityID)
+    public List<PostResponse> getPosts(Long communityID,Long userID)
     {
         return  communityRepo.findById(communityID).orElseThrow(
             () -> new UserErrorException("no community with this id"))
             .getPosts()
             .stream()
-            .map(PostMapper.mapper::PostToResponse)
+            .map((e)-> postMapper.PostToResponse(e, userID))
             .toList();
     }
 

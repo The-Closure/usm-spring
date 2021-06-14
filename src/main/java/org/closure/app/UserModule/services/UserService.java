@@ -34,6 +34,9 @@ public class UserService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    @Autowired 
+    PostMapper postMapper;
+
     public UserResponse addUser(UserRequest userRequest)
     {
         if(userRepo.findByEmail(userRequest.getEmail()).isEmpty())
@@ -116,7 +119,7 @@ public class UserService {
             () -> new UserErrorException("no user with this id"))
             .getPosts()
             .stream()
-            .map(PostMapper.mapper::PostToResponse)
+            .map((e)-> postMapper.PostToResponse(e, userID))
             .toList();
         
         

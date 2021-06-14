@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,9 +84,9 @@ public class CommunityController {
         return ResponseEntity.status(HttpStatus.OK).body(service.getUsers(cId));
     }
 
-    @GetMapping(value="/getPosts")
-    public List<PostResponse> getPosts(@RequestParam(name = "communityID") String communityID) {
-        return service.getPosts(Long.parseLong(communityID));
+    @GetMapping(value="/getPosts/{userID}")
+    public List<PostResponse> getPosts(@RequestParam(name = "communityID") String communityID,@PathVariable(name = "userID") Long userID) {
+        return service.getPosts(Long.parseLong(communityID),userID);
     }
     
     

@@ -81,9 +81,10 @@ public class PostController {
                         @RequestParam(defaultValue = "0") Integer pageNo, 
                         @RequestParam(defaultValue = "10") Integer pageSize,
                         @RequestParam(name = "communityID") Long communityID,
-                        @RequestParam(defaultValue = "id") String sortBy) 
+                        @RequestParam(defaultValue = "id", required = false,value = "id") String sortBy,
+                        @RequestParam(name = "userID") Long userID)
     {
-        List<PostResponse> list = postService.getAllPosts(communityID, pageNo, pageSize, sortBy);
+        List<PostResponse> list = postService.getAllPosts(communityID, pageNo, pageSize, sortBy,userID);
  
         return new ResponseEntity<List<PostResponse>>(list, new HttpHeaders(), HttpStatus.OK); 
     }

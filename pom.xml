@@ -82,9 +82,15 @@
 						
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<compilerArg>
-							-Amapstruct.defaultComponentModel=spring
-						</compilerArg>
+						<arg>
+							-Amapstruct.suppressGeneratorTimestamp=true
+						</arg>
+						<arg>
+							-Amapstruct.suppressGeneratorVersionInfoComment=true
+						</arg>
+						<arg>
+							-Amapstruct.verbose=true
+						</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
@@ -102,9 +108,15 @@
 						
 					</annotationProcessorPaths>
 					<compilerArgs>
-						<compilerArg>
-							-Amapstruct.defaultComponentModel=spring
-						</compilerArg>
+						<arg>
+							-Amapstruct.suppressGeneratorTimestamp=true
+						</arg>
+						<arg>
+							-Amapstruct.suppressGeneratorVersionInfoComment=true
+						</arg>
+						<arg>
+							-Amapstruct.verbose=true
+						</arg>
 					</compilerArgs>
 				</configuration>
 			</plugin>
