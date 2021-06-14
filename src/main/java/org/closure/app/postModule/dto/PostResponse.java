@@ -4,6 +4,15 @@ import java.util.Objects;
 
 import org.closure.app.UserModule.dto.UserResponse;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
+
+@With
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostResponse {
     private Long postID;
     private Long userID; 
@@ -14,159 +23,5 @@ public class PostResponse {
     private String attach; 
     private boolean likeState;
 
-
-
-    public PostResponse() {
-    }
-
-    public PostResponse(Long postID, Long userID, UserResponse uEntity, Long communityID, String title, String value, String attach, boolean likeState) {
-        this.postID = postID;
-        this.userID = userID;
-        this.uEntity = uEntity;
-        this.communityID = communityID;
-        this.title = title;
-        this.value = value;
-        this.attach = attach;
-        this.likeState = likeState;
-    }
-
-    public Long getPostID() {
-        return this.postID;
-    }
-
-    public void setPostID(Long postID) {
-        this.postID = postID;
-    }
-
-    public Long getUserID() {
-        return this.userID;
-    }
-
-    public void setUserID(Long userID) {
-        this.userID = userID;
-    }
-
-    public UserResponse getUEntity() {
-        return this.uEntity;
-    }
-
-    public void setUEntity(UserResponse uEntity) {
-        this.uEntity = uEntity;
-    }
-
-    public Long getCommunityID() {
-        return this.communityID;
-    }
-
-    public void setCommunityID(Long communityID) {
-        this.communityID = communityID;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getValue() {
-        return this.value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
-    }
-
-    public String getAttach() {
-        return this.attach;
-    }
-
-    public void setAttach(String attach) {
-        this.attach = attach;
-    }
-
-    public boolean isLikeState() {
-        return this.likeState;
-    }
-
-    public boolean getLikeState() {
-        return this.likeState;
-    }
-
-    public void setLikeState(boolean likeState) {
-        this.likeState = likeState;
-    }
-
-    public PostResponse postID(Long postID) {
-        setPostID(postID);
-        return this;
-    }
-
-    public PostResponse userID(Long userID) {
-        setUserID(userID);
-        return this;
-    }
-
-    public PostResponse uEntity(UserResponse uEntity) {
-        setUEntity(uEntity);
-        return this;
-    }
-
-    public PostResponse communityID(Long communityID) {
-        setCommunityID(communityID);
-        return this;
-    }
-
-    public PostResponse title(String title) {
-        setTitle(title);
-        return this;
-    }
-
-    public PostResponse value(String value) {
-        setValue(value);
-        return this;
-    }
-
-    public PostResponse attach(String attach) {
-        setAttach(attach);
-        return this;
-    }
-
-    public PostResponse likeState(boolean likeState) {
-        setLikeState(likeState);
-        return this;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof PostResponse)) {
-            return false;
-        }
-        PostResponse postResponse = (PostResponse) o;
-        return Objects.equals(postID, postResponse.postID) && Objects.equals(userID, postResponse.userID) && Objects.equals(uEntity, postResponse.uEntity) && Objects.equals(communityID, postResponse.communityID) && Objects.equals(title, postResponse.title) && Objects.equals(value, postResponse.value) && Objects.equals(attach, postResponse.attach) && likeState == postResponse.likeState;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(postID, userID, uEntity, communityID, title, value, attach, likeState);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-            " postID='" + getPostID() + "'" +
-            ", userID='" + getUserID() + "'" +
-            ", uEntity='" + getUEntity() + "'" +
-            ", communityID='" + getCommunityID() + "'" +
-            ", title='" + getTitle() + "'" +
-            ", value='" + getValue() + "'" +
-            ", attach='" + getAttach() + "'" +
-            ", likeState='" + isLikeState() + "'" +
-            "}";
-    }
-    
 
 }
