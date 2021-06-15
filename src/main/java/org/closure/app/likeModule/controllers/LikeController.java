@@ -45,10 +45,10 @@ public class LikeController {
    public boolean deleteLike
    (
        @RequestParam(name = "userID") Long userID, 
-       @RequestParam(name = "likeID") Long likeID
+       @RequestParam(name = "postID") Long postID
    )
    {
-       return likeService.deleteLike(userID, likeID);
+       return likeService.deleteLike(userID, postID);
    }
     
 

@@ -49,6 +49,7 @@ public class PostService {
             ()-> new UserErrorException("no user with this id"));
         if(userEntity.getCommuninty().getId() == null) 
             throw new CommunityErrorException("no community for this user");
+            
         PostEntity postEntity = postRepo.save
             (
                 new PostEntity()
@@ -144,7 +145,7 @@ public class PostService {
 
     public boolean checkUserLikeOnPost(Long userID,Long postID)
     {     
-        return userRepo.findById(userID).orElseThrow(()-> new UserErrorException("no user with this id")).getLikes().stream().anyMatch((l)-> l.getPentity().getId().equals(postID)&&l.getUentity().getId().equals(userID));
+        return userRepo.findById(userID).orElseThrow(()-> new UserErrorException("no user with this id")).getLikes().stream().anyMatch((l)-> l.getPentity().getId().equals(postID));
     }
 
 }

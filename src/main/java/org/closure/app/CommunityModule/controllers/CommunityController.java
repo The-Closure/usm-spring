@@ -85,6 +85,7 @@ public class CommunityController {
     }
 
     @GetMapping(value="/getPosts/{userID}")
+    
     public List<PostResponse> getPosts(@RequestParam(name = "communityID") String communityID,@PathVariable(name = "userID") Long userID) {
         return service.getPosts(Long.parseLong(communityID),userID);
     }
