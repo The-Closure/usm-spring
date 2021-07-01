@@ -107,7 +107,7 @@ public class PostService {
                 .getUEntity());
     }
     public List<PostResponse> getAllPosts(Long communityID, Integer pageNo, Integer pageSize, String sortBy,Long userID) {
-        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+        Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy).descending());
  
         Page<PostEntity> pagedResult = postRepo.findAllByPcommuninty(
             communityRepo.findById(communityID).orElseThrow(
@@ -144,8 +144,16 @@ public class PostService {
     }
 
     public boolean checkUserLikeOnPost(Long userID,Long postID)
-    {     
+    {     try {
+        
         return userRepo.findById(userID).orElseThrow(()-> new UserErrorException("no user with this id")).getLikes().stream().anyMatch((l)-> l.getPentity().getId().equals(postID));
+    } catch (Exception e) {
+        return false;
+    }
+    }
+
+    public int getPostLikes(Long postID){
+        return postRepo.findById(postID).orElseThrow(()-> new PostErrorException("no post with this id")).getLikes().size();
     }
 
 }

@@ -10,6 +10,7 @@ import org.closure.app.entities.LikeEntity;
 import org.closure.app.likeModule.dto.LikeRequest;
 import org.closure.app.likeModule.dto.LikeResponse;
 import org.closure.app.likeModule.exceptions.LikeErrorException;
+import org.closure.app.likeModule.mapper.LikeMapper;
 import org.closure.app.likeModule.repositories.LikeRepo;
 import org.closure.app.postModule.exceptions.PostErrorException;
 import org.closure.app.postModule.repositories.PostRepo;
@@ -27,6 +28,7 @@ public class LikeService {
 
     @Autowired 
     PostRepo postRepo;
+    
 
     public boolean addLike(LikeRequest request)
     {
@@ -46,16 +48,8 @@ public class LikeService {
     {
         return likeRepo.findByPentity(postRepo.findById(postID).orElseThrow(
             ()-> new PostErrorException("no post with this id"))).stream().map
-                (
-                    (mapper) -> new LikeResponse
-                        (
-                            mapper.getId(),
-                            new UserResponse
-                            (
-                                mapper.getUentity().getId(),
-                                mapper.getUentity().getName(),
-                                mapper.getUentity().getImg() )
-                        )
+                (LikeMapper.INSTANCE::likeToResponse
+                        
                 )
             .toList();
     }
@@ -64,16 +58,7 @@ public class LikeService {
     {
         return likeRepo.findByUentity(userRepo.findById(userID).orElseThrow(
             ()-> new UserErrorException("no user with this id"))).stream().map
-                (
-                    (mapper) -> new LikeResponse(
-                        mapper.getId(),
-                        new UserResponse
-                        (
-                            mapper.getUentity().getId(),
-                            mapper.getUentity().getName(),
-                            mapper.getUentity().getImg()
-                        )
-                    )
+                (LikeMapper.INSTANCE::likeToResponse
                 )
             .toList();
     }

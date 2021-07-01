@@ -1,8 +1,12 @@
 package org.closure.app.postModule.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.closure.app.UserModule.dto.UserResponse;
+import org.closure.app.commentModule.dto.CommentResponse;
+import org.closure.app.likeModule.dto.LikeResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +26,7 @@ public class PostResponse {
     private String value;
     private String attach; 
     private boolean likeState;
-
-
+    private int likesCount;
+    private List<LikeResponse> likes;
+    private List<CommentResponse> comments;
 }

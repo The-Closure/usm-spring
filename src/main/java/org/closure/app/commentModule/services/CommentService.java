@@ -41,7 +41,7 @@ public class CommentService {
                     )
                 )
             )
-        ).postID(postID).userID(userID);
+        );
     }
 
     public CommentResponse getComment(Long commentID)

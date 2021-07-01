@@ -9,7 +9,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(componentModel = "spring")
 public interface LikeMapper {
     
     public static LikeMapper INSTANCE = Mappers.getMapper( LikeMapper.class );
@@ -18,10 +18,10 @@ public interface LikeMapper {
     @Mapping(target = "postID", expression = "java(like.getPentity().getId())")
     public LikeModel likeToModel(LikeEntity like);
 
+    @Mapping(target = "likerName", expression = "java(like.getUentity().getName())")
+    @Mapping(target = "likerImg", expression = "java(like.getUentity().getImg())")
+    @Mapping(target = "likerId", expression = "java(like.getUentity().getId())")
     public LikeResponse likeToResponse(LikeEntity like);
 
-    default UserResponse getUserResponse(UserEntity user)
-    {
-        return null;
-    }
+    
 }
