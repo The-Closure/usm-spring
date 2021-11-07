@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -52,7 +54,7 @@ public class UserEntity {
     private Date created_at;
     private String img;
     private boolean is_Activated;
-
+    
     /**
      * relational attrs
      */
@@ -74,16 +76,13 @@ public class UserEntity {
     @OneToMany(mappedBy = "uentity"  , cascade = CascadeType.ALL ,orphanRemoval = true)
     List<CommentEntity> comments;
 
-    // @OneToOne(mappedBy = "admin")
-    // private CommunityEntity comm_admin;
-    /**
-     * constructors
-     */
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "owner",optional = true)
+    private FirebaseEntity token;
 
     public UserEntity() {
     }
 
-    public UserEntity(Long id, String name, String email, String password, String university, String community_name, Integer study_year, Date start_year, Date age, boolean flag, Date created_at, String img, boolean is_Activated, CommunityEntity communinty, List<PostEntity> posts, List<LikeEntity> likes, List<BoardEntity> boards, List<CommentEntity> comments) {
+    public UserEntity(Long id, String name, String email, String password, String university, String community_name, Integer study_year, Date start_year, Date age, boolean flag, Date created_at, String img, boolean is_Activated, CommunityEntity communinty, List<PostEntity> posts, List<LikeEntity> likes, List<BoardEntity> boards, List<CommentEntity> comments, FirebaseEntity token) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -102,6 +101,7 @@ public class UserEntity {
         this.likes = likes;
         this.boards = boards;
         this.comments = comments;
+        this.token = token;
     }
 
     public Long getId() {
@@ -256,6 +256,14 @@ public class UserEntity {
         this.comments = comments;
     }
 
+    public FirebaseEntity getToken() {
+        return this.token;
+    }
+
+    public void setToken(FirebaseEntity token) {
+        this.token = token;
+    }
+
     public UserEntity id(Long id) {
         setId(id);
         return this;
@@ -346,6 +354,11 @@ public class UserEntity {
         return this;
     }
 
+    public UserEntity token(FirebaseEntity token) {
+        setToken(token);
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == this)
@@ -354,12 +367,12 @@ public class UserEntity {
             return false;
         }
         UserEntity userEntity = (UserEntity) o;
-        return Objects.equals(id, userEntity.id) && Objects.equals(name, userEntity.name) && Objects.equals(email, userEntity.email) && Objects.equals(password, userEntity.password) && Objects.equals(university, userEntity.university) && Objects.equals(community_name, userEntity.community_name) && Objects.equals(study_year, userEntity.study_year) && Objects.equals(start_year, userEntity.start_year) && Objects.equals(age, userEntity.age) && flag == userEntity.flag && Objects.equals(created_at, userEntity.created_at) && Objects.equals(img, userEntity.img) && is_Activated == userEntity.is_Activated && Objects.equals(communinty, userEntity.communinty) && Objects.equals(posts, userEntity.posts) && Objects.equals(likes, userEntity.likes) && Objects.equals(boards, userEntity.boards) && Objects.equals(comments, userEntity.comments);
+        return Objects.equals(id, userEntity.id) && Objects.equals(name, userEntity.name) && Objects.equals(email, userEntity.email) && Objects.equals(password, userEntity.password) && Objects.equals(university, userEntity.university) && Objects.equals(community_name, userEntity.community_name) && Objects.equals(study_year, userEntity.study_year) && Objects.equals(start_year, userEntity.start_year) && Objects.equals(age, userEntity.age) && flag == userEntity.flag && Objects.equals(created_at, userEntity.created_at) && Objects.equals(img, userEntity.img) && is_Activated == userEntity.is_Activated && Objects.equals(communinty, userEntity.communinty) && Objects.equals(posts, userEntity.posts) && Objects.equals(likes, userEntity.likes) && Objects.equals(boards, userEntity.boards) && Objects.equals(comments, userEntity.comments) && Objects.equals(token, userEntity.token);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, university, community_name, study_year, start_year, age, flag, created_at, img, is_Activated, communinty, posts, likes, boards, comments);
+        return Objects.hash(id, name, email, password, university, community_name, study_year, start_year, age, flag, created_at, img, is_Activated, communinty, posts, likes, boards, comments, token);
     }
 
     @Override
@@ -383,8 +396,8 @@ public class UserEntity {
             ", likes='" + getLikes() + "'" +
             ", boards='" + getBoards() + "'" +
             ", comments='" + getComments() + "'" +
+            ", token='" + getToken() + "'" +
             "}";
     }
-
 
 }
