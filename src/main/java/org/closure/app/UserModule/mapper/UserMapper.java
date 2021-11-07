@@ -26,12 +26,13 @@ public abstract class UserMapper {
 
     public UserEntity requestToUser(UserRequest request, CommunityEntity... community){
         return new UserEntity().
-        password(request.getPassword()).
-        name(request.getName()).
-        email(request.getEmail()).
-        img(ImgService.generateImg(request.getName())).
-        flag(true).            
-        communinty(community[0]).
-        community_name(community[0].getName());
+        withPassword(request.getPassword()).
+        withName(request.getName()).
+        withEmail(request.getEmail()).
+        withImg(ImgService.generateImg(request.getName())).
+
+        withFlag(true).            
+        withCommuninty(community[0]).
+        withCommunity_name(community[0].getName());
     }
 }

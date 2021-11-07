@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +22,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
-
 @RestController
 @RequestMapping(path = "/v2/api/user")
 public class UserController {
@@ -32,69 +29,74 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @PostMapping(value="/add")
+    @PostMapping(value = "/add")
     public ResponseEntity<Object> getMethodName(@RequestBody UserRequest request) {
-        System.out.println(request.toString());
         try {
             return ResponseEntity.status(HttpStatus.CREATED).body(userService.addUser(request));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.CREATED).body(e.getMessage());
         }
-        
+
     }
 
-    @PutMapping(value="/signin")
-    public ResponseEntity<UserResponse> signin
-    (
-        @RequestParam(name = "email") String email, 
-        @RequestParam(name = "password") String password)
-    {
+    @PutMapping(value = "/signin")
+    public ResponseEntity<UserResponse> signin(@RequestParam(name = "email") String email,
+            @RequestParam(name = "password") String password) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.signin(email, password));
     }
-    
+
     @DeleteMapping(path = "/delete")
-    public boolean delete
-    (
-        @RequestParam(name = "id")  Long id,
-        @RequestParam(name = "password") String password)
-    {
+    public boolean delete(@RequestParam(name = "id") Long id, @RequestParam(name = "password") String password) {
         return userService.delete(id, password);
     }
 
-    @PostMapping(value="/update")
+    @PostMapping(value = "/update")
     public ResponseEntity<UserModel> updaEntity(@RequestBody UserModel model) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.edit(model));
     }
-    
-    @GetMapping(value="/signout")
-    public boolean signout
-    (
-        @RequestParam(name = "id") Long id,
-        @RequestParam(name = "name") String name) 
-    {
+
+    @GetMapping(value = "/signout")
+    public boolean signout(@RequestParam(name = "id") Long id, @RequestParam(name = "name") String name) {
         return userService.signout(id, name);
     }
-    
-    @GetMapping(value="/search")
+
+    @GetMapping(value = "/search")
     public ResponseEntity<List<UserResponse>> getMethodName(@RequestParam(name = "value") String value) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.search(value));
     }
 
-    @GetMapping(value="/getBoards")
+    @GetMapping(value = "/getBoards")
     public List<BoardResponse> getBoardsForUser(@RequestParam(name = "userID") String userID) {
         return userService.getBoards(Long.parseLong(userID));
     }
-    
-    @GetMapping(value="/getPosts")
+
+    @GetMapping(value = "/getPosts")
     public List<PostResponse> getPosts(@RequestParam(name = "userID") String userID) {
         return userService.getPosts(Long.parseLong(userID));
     }
-    @GetMapping(value="/sendmail/{id}/{email}")
-    public boolean getMethodName(@PathVariable String id, @PathVariable String email) {
-        userService.sendEmail(id, email);
-        return true;
+
+    @GetMapping(value = "/sendmail/{id}/{email}")
+    public ResponseEntity<Object> getMethodName(@PathVariable String id, @PathVariable String email) {
+        try {
+            userService.sendEmail(userService.readUser(Long.parseLong(id)));
+        } catch (NumberFormatException e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(true);
+    }
+
+    @GetMapping(value="/home/verifyaccount/{id}")
+    public ResponseEntity<Object> verifyAccount(@PathVariable(required = true) Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.verifyAccount(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
     
-    
-    
+
 }

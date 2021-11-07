@@ -13,7 +13,9 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.With;
 @Entity
 @Table(name = "likes")
@@ -21,7 +23,8 @@ import lombok.With;
 @With
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 public class LikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

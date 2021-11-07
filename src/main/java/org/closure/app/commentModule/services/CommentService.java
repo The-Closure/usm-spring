@@ -31,11 +31,11 @@ public class CommentService {
     {          
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save(
-                new CommentEntity().value(request.getValue()).pentity(
+                new CommentEntity().withValue(request.getValue()).withPentity(
                     postRepo.findById(postID).orElseThrow(
                         ()->new PostErrorException("no post with this id")
                     )
-                ).uentity(
+                ).withUentity(
                     userRepo.findById(userID).orElseThrow(
                         ()-> new UserErrorException("no user with this id")
                     )
@@ -59,7 +59,7 @@ public class CommentService {
             () -> new UserErrorException("no post with this id"));
         return CommentMapper.INSTANCE.commentToResponse(
             commentRepo.save( commentRepo.findById(commentID).orElseThrow(
-                    () -> new UserErrorException("no comment with this id")).value(commentRequest.getValue())));
+                    () -> new UserErrorException("no comment with this id")).withValue(commentRequest.getValue())));
     }
 
     public boolean deleteComment(Long userID, Long commentID)

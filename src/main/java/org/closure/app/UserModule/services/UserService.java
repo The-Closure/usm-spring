@@ -2,7 +2,6 @@ package org.closure.app.UserModule.services;
 
 import java.util.List;
 
-import org.closure.app.CommunityModule.exceptions.CommunityErrorException;
 import org.closure.app.CommunityModule.repositories.CommunityRepo;
 import org.closure.app.UserModule.dto.UserRequest;
 import org.closure.app.UserModule.dto.UserResponse;
@@ -15,13 +14,17 @@ import org.closure.app.boardModule.exceptions.BoardErrorException;
 import org.closure.app.boardModule.mapper.BoardMapper;
 import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.commentModule.mapper.CommentMapper;
+import org.closure.app.entities.CommunityEntity;
 import org.closure.app.entities.UserEntity;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.mapper.PostMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
@@ -30,127 +33,116 @@ public class UserService {
 
     @Autowired
     private CommunityRepo communityRepo;
-    
+
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Autowired 
+    @Autowired
     PostMapper postMapper;
 
-    public UserResponse addUser(UserRequest userRequest)
-    {
-        if(userRepo.findByEmail(userRequest.getEmail()).isEmpty())
-            return UserMapper.INSTANCE.userToResponse(
-                userRepo.save(userRequest.getCommunity() != null ?
-                    UserMapper.INSTANCE.requestToUser(
-                        userRequest, 
-                        communityRepo.findById(userRequest.getCommunity()).orElseThrow(
-                            () -> new CommunityErrorException("no community with this id"))) 
-                    : UserMapper.INSTANCE.requestToUser(userRequest)
-                )
-            );
-        else 
-            throw new UserErrorException(userRequest.getEmail()+" is exist");
+    @Value("${org.closure.mail.service.sernder:anas.anas1998.tar@gmail.com}")
+    private String sender;
+    @Value("${org.closure.host.name:http://localhost:8080}")
+    private String hostName;
+
+    @Transactional
+    public UserResponse addUser(UserRequest userRequest) throws Exception {
+        if (userRepo.findByEmail(userRequest.getEmail()).isEmpty()) {
+
+            CommunityEntity communityEntity = communityRepo.findById(userRequest.getCommunity())
+                    .orElseThrow(() -> new Exception("no community with this id"));
+            UserEntity userEntity = UserMapper.INSTANCE.requestToUser(userRequest, communityEntity);
+            userEntity = userRepo.save(userEntity);
+            UserResponse userResponse = UserMapper.INSTANCE.userToResponse(userEntity);
+            sendEmail(userResponse);
+
+            return userResponse;
+        }
+
+        else
+            throw new UserErrorException(userRequest.getEmail() + " is exist");
     }
-    public UserResponse signin(String email, String password)
-    {
-         return  UserMapper.INSTANCE.userToResponse(
-             userRepo.save(
-                 userRepo.findByEmailAndPassword(email, password).orElseThrow(
-                    () -> new UserErrorException(email+" error in email or password")
-                ).flag(true)
-            )
-        );
+
+    public UserResponse readUser(Long uid) throws Exception {
+        return UserMapper.INSTANCE
+                .userToResponse(userRepo.findById(uid).orElseThrow(() -> new Exception("no user with this id")));
+
     }
-    public boolean delete(Long id, String password)
-    {
-        userRepo.delete(userRepo.findByIdAndPassword(id, password).orElseThrow(
-            () -> new UserErrorException("error in id or password")));
+
+    public UserResponse signin(String email, String password) {
+        return UserMapper.INSTANCE.userToResponse(userRepo.save(userRepo.findByEmailAndPassword(email, password)
+                .orElseThrow(() -> new UserErrorException(email + " error in email or password")).withFlag(true)));
+    }
+
+    public boolean delete(Long id, String password) {
+        userRepo.delete(userRepo.findByIdAndPassword(id, password)
+                .orElseThrow(() -> new UserErrorException("error in id or password")));
         return userRepo.findById(id).isEmpty();
     }
-    public boolean signout(Long id, String name)
-    {
-        userRepo.save(userRepo.findByIdAndName(id, name).orElseThrow(
-            () -> new UserErrorException("error in id or name")).flag(false));
+
+    public boolean signout(Long id, String name) {
+        userRepo.save(userRepo.findByIdAndName(id, name)
+                .orElseThrow(() -> new UserErrorException("error in id or name")).withFlag(false));
         return !userRepo.findByIdAndName(id, name).get().isFlag();
     }
-    public UserModel edit(UserModel userModel)
-    {
-        UserEntity user = userRepo.findByIdAndPassword(Long.valueOf(userModel.getId()), userModel.getPassword()).orElseThrow(
-            () -> new UserErrorException("error in email or password"));
-        user
-         .age(userModel.getAge())
-         .name(userModel.getName())
-         .password(userModel.getPassword())
-         .email(userModel.getEmail())
-         .university(userModel.getUniversity())
-         .img(userModel.getImg())
-         .community_name(userModel.getCommunity_name())
-         .study_year(userModel.getStudy_year())       
-         .start_year(userModel.getStart_year());
+
+    public UserModel edit(UserModel userModel) {
+        UserEntity user = userRepo.findByIdAndPassword(Long.valueOf(userModel.getId()), userModel.getPassword())
+                .orElseThrow(() -> new UserErrorException("error in email or password"));
+        user.withAge(userModel.getAge()).withName(userModel.getName()).withPassword(userModel.getPassword())
+                .withEmail(userModel.getEmail()).withUniversity(userModel.getUniversity()).withImg(userModel.getImg())
+                .withCommunity_name(userModel.getCommunity_name()).withStudy_year(userModel.getStudy_year())
+                .withStart_year(userModel.getStart_year());
         userRepo.save(user);
-        return userModel;    
+        return userModel;
     }
 
-    public List<UserResponse> search(String value)
-    {
-       return userRepo.findByEmailLikeOrNameLike(value).stream().map(
-           UserMapper.INSTANCE::userToResponse
-        ).toList();
+    public List<UserResponse> search(String value) {
+        return userRepo.findByEmailLikeOrNameLike(value).stream().map(UserMapper.INSTANCE::userToResponse).toList();
     }
 
-    public UserEntity getById(Long id)
-    {
-        return userRepo.findById(id).orElseThrow(
-            ()-> new UserErrorException("no user with this id"));
+    public UserEntity getById(Long id) {
+        return userRepo.findById(id).orElseThrow(() -> new UserErrorException("no user with this id"));
     }
 
-    public List<BoardResponse> getBoards(Long userID)
-    {
-        return userRepo.findById(userID).orElseThrow(
-            ()-> new BoardErrorException("no board with this name")).getBoards().stream().map(
-                BoardMapper.INSTANCE::boardToResponse).toList();
-       
+    public List<BoardResponse> getBoards(Long userID) {
+        return userRepo.findById(userID).orElseThrow(() -> new BoardErrorException("no board with this name"))
+                .getBoards().stream().map(BoardMapper.INSTANCE::boardToResponse).toList();
+
     }
 
-    public List<PostResponse> getPosts(Long userID)
-    {
-        return userRepo.findById(userID).orElseThrow(
-            () -> new UserErrorException("no user with this id"))
-            .getPosts()
-            .stream()
-            .map((e)-> postMapper.PostToResponse(e, userID))
-            .toList();
-        
-        
+    public List<PostResponse> getPosts(Long userID) {
+        return userRepo.findById(userID).orElseThrow(() -> new UserErrorException("no user with this id")).getPosts()
+                .stream().map((e) -> postMapper.PostToResponse(e, userID)).toList();
+
     }
 
-      //TODO: add method to fetch general info about user by its id(Unconvinced)
-      
-    public List<CommentResponse> getCommentsForUser(Long userID)
-    {
-        return userRepo.findById(userID).orElseThrow(
-            ()-> new UserErrorException("no post with this id"))
-        .getComments()
-        .stream()
-        .map(
-            CommentMapper.INSTANCE::commentToResponse
-        ).toList();
+    // TODO: add method to fetch general info about user by its id(Unconvinced)
+
+    public List<CommentResponse> getCommentsForUser(Long userID) {
+        return userRepo.findById(userID).orElseThrow(() -> new UserErrorException("no post with this id")).getComments()
+                .stream().map(CommentMapper.INSTANCE::commentToResponse).toList();
     }
 
-    public boolean sendEmail(String id, String email)
-    {
+    // @Async
+    public UserResponse sendEmail(UserResponse userResponse) throws Exception {
         SimpleMailMessage msg = new SimpleMailMessage();
-        msg.setFrom("support@smart-mira.com");
-        msg.setTo(email);
+        msg.setFrom(sender);
+        msg.setTo(userResponse.getEmail());
 
-        msg.setSubject("Verfication mail (Magic Mirror)");
-        msg.setText("thanks for joining our platform \nplease verify your account by this link : http://localhost:8080/api/v2/users/home/verifyaccount/"+id);
-
+        msg.setSubject("Verfication mail (USM - verfication mail)");
+        String text = String.format(
+                "thanks for joining our platform \nplease verify your account by this link : %s/v2/api/user/home/verifyaccount/%s",
+                hostName, userResponse.getId());
+        msg.setText(text);
         javaMailSender.send(msg);
-        return true;
+        return userResponse;
     }
 
-
+    public UserResponse verifyAccount(Long uid) throws Exception {
+        UserEntity user = userRepo.findById(uid).orElseThrow(() -> new Exception("no user with this account"));
+        user.setActivated(true);
+        return UserMapper.INSTANCE.userToResponse(userRepo.save(user));
+    }
 
 }
