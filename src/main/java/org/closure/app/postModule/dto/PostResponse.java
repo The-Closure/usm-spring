@@ -1,20 +1,18 @@
 package org.closure.app.postModule.dto;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.closure.app.UserModule.dto.UserResponse;
 import org.closure.app.commentModule.dto.CommentResponse;
 import org.closure.app.likeModule.dto.LikeResponse;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.NoArgsConstructor;
 import lombok.With;
 
 @With
-@Data
+
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostResponse {

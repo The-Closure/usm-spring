@@ -1,7 +1,6 @@
 package org.closure.app.entities;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,9 +47,9 @@ public class CommunityEntity {
     public CommunityResponse toCommunityResponse()
     {
         return new CommunityResponse()
-            .description(description)
-            .img(img)
-            .name(name);
+            .withDescription(description)
+            .withImg(img)
+            .withName(name);
     }
 
 

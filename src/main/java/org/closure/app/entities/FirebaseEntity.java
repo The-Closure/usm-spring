@@ -1,7 +1,6 @@
 package org.closure.app.entities;
 
 import java.time.Instant;
-import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

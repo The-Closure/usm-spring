@@ -1,7 +1,6 @@
 package org.closure.app.entities;
 
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;

@@ -1,6 +1,5 @@
 package org.closure.app.UserModule.dto;
 
-import java.util.Objects;
 
 import org.closure.app.CommunityModule.models.CommunityModel;
 

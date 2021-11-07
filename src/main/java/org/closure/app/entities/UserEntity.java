@@ -2,7 +2,6 @@ package org.closure.app.entities;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import org.springframework.beans.factory.annotation.Value;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

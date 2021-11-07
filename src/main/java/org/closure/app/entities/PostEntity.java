@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.lang.Nullable;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,7 +34,6 @@ import lombok.With;
     property = "id"
 )
 @With
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
