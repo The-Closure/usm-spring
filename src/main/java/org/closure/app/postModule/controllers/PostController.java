@@ -41,8 +41,8 @@ public class PostController {
     }
 
     @GetMapping(value="/getpost")
-    public PostResponse getPost(@RequestParam(name = "postID") String postID) {
-        return postService.getpost(Long.parseLong(postID));
+    public PostResponse readPost(@RequestParam(name = "postID") String postID) {
+        return postService.readPost(Long.parseLong(postID));
     }
 
     @PutMapping(value="updatepost/{userID}/{postID}")

@@ -50,10 +50,7 @@ public class UserController {
         return userService.delete(id, password);
     }
 
-    @PostMapping(value = "/update")
-    public ResponseEntity<UserModel> updaEntity(@RequestBody UserModel model) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.edit(model));
-    }
+    //TODO : add udpate endpoint for user info 
 
     @GetMapping(value = "/signout")
     public boolean signout(@RequestParam(name = "id") Long id, @RequestParam(name = "name") String name) {

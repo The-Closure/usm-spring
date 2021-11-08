@@ -68,6 +68,11 @@ public class UserService {
 
     }
 
+    public UserEntity getUser(Long uid) throws Exception {
+        return userRepo.findById(uid).orElseThrow(() -> new Exception("no user with this id"));
+
+    }
+
     public UserResponse signin(String email, String password) {
         return UserMapper.INSTANCE.userToResponse(userRepo.save(userRepo.findByEmailAndPassword(email, password)
                 .orElseThrow(() -> new UserErrorException(email + " error in email or password")).withFlag(true)));
@@ -85,16 +90,7 @@ public class UserService {
         return !userRepo.findByIdAndName(id, name).get().isFlag();
     }
 
-    public UserModel edit(UserModel userModel) {
-        UserEntity user = userRepo.findByIdAndPassword(Long.valueOf(userModel.getId()), userModel.getPassword())
-                .orElseThrow(() -> new UserErrorException("error in email or password"));
-        user.withAge(userModel.getAge()).withName(userModel.getName()).withPassword(userModel.getPassword())
-                .withEmail(userModel.getEmail()).withUniversity(userModel.getUniversity()).withImg(userModel.getImg())
-                .withCommunity_name(userModel.getCommunity_name()).withStudy_year(userModel.getStudy_year())
-                .withStart_year(userModel.getStart_year());
-        userRepo.save(user);
-        return userModel;
-    }
+    //TODO : add udpate function for user info
 
     public List<UserResponse> search(String value) {
         return userRepo.findByEmailLikeOrNameLike(value).stream().map(UserMapper.INSTANCE::userToResponse).toList();

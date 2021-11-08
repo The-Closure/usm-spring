@@ -4,6 +4,7 @@ import org.closure.app.UserModule.exceptions.UserErrorException;
 import org.closure.app.UserModule.repositories.UserRepo;
 import org.closure.app.entities.PostEntity;
 import org.closure.app.likeModule.mapper.LikeMapper;
+import org.closure.app.postModule.dto.PostRequest;
 import org.closure.app.postModule.dto.PostResponse;
 import org.closure.app.postModule.repositories.PostRepo;
 import org.closure.app.postModule.services.PostService;
@@ -39,6 +40,7 @@ public abstract class PostMapper {
     @Mapping(target = "likesCount", expression = "java(postService.getPostLikes(post.getId()))")
     // @Mapping(target = "likes", expression = "java()")
     public abstract PostResponse PostToResponse(PostEntity post,Long userID);
+
     public boolean checkUserLikeOnPost(Long userID,Long postID)
     {     
         return userRepo.findById(userID).orElseThrow(()-> new UserErrorException("no user with this id")).getLikes().stream().anyMatch((l)-> l.getPentity().getId().equals(postID)&&l.getUentity().getId().equals(userID));

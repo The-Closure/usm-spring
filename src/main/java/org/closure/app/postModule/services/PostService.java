@@ -67,9 +67,13 @@ public class PostService {
         return postMapper.PostToResponse(postEntity, userID);
     }
 
-    public PostResponse getpost(Long id) {
+    public PostResponse readPost(Long id) {
         PostEntity pEntity = postRepo.findById(id).orElseThrow(() -> new PostErrorException("no post with this id"));
         return postMapper.PostToResponse(pEntity, 0l); // zero to return ppst without like state
+    }
+
+    public PostEntity getPost(Long id) {
+        return postRepo.findById(id).orElseThrow(() -> new PostErrorException("no post with this id"));
     }
 
     public PostResponse updatePost(Long postID, Long userID, PostRequest request) {
